@@ -6,7 +6,6 @@ function Home() {
         <>
             <HomeHeader />
             <Hero />
-
         </>
     )
 }

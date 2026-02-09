@@ -1,21 +1,15 @@
-import '../assets/styles/Hero.css'
-import RegisterBtn from "../components/RegisterBtn.jsx"
 import HeroImage from "../components/HeroImage.jsx"
 import HeroText from "../components/HeroText.jsx"
-import LoginBtn from "../components/LoginBtn.jsx"
 
 function Hero() {
     return (
-        <main className="hero-section">
-            <HeroImage />
+        <main className="flex flex-col md:flex-row justify-center items-center py-10 gap-20 lg:gap-30 max-w-350 mx-auto min-h-[70vh] px-8">
+            <div className="w-full md:w-auto">
+                <HeroImage />
+            </div>
 
-            <div className="hero-content-wrapper">
+            <div className="flex flex-col justify-center max-w-190">
                 <HeroText />
-
-                <div className="hero-buttons">
-                    <RegisterBtn />
-                    <LoginBtn />
-                </div>
             </div>
         </main>
     )

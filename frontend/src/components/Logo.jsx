@@ -1,10 +1,13 @@
 import logo from '../assets/images/poller_logo_text.png'
-import '../assets/styles/Logo.css'
 
 function Logo() {
     return (
-        <div className="logo-wrapper">
-            <img src={logo} alt="poller logo" className="logo-img" />
+        <div className="flex items-center">
+            <img
+                src={logo}
+                alt="Poller logo"
+                className="h-16 w-auto object-contain"
+            />
         </div>
     )
 }

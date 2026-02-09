@@ -1,6 +1,5 @@
 import NavItem from "./NavItem.jsx"
 import Logo from "./Logo.jsx"
-import '../assets/styles/NavBar.css'
 
 const navItems = [
     {label: "Par mums", href: "/about", dropdown: ["Komanda", "Mērķis"]},
@@ -11,9 +10,10 @@ const navItems = [
 
 function NavBar() {
     return (
-        <header className="navbar-header">
+        <header className="flex justify-between items-center px-15 py-7 bg-white bg-slate-100">
             <Logo />
-            <nav className="nav-container">
+
+            <nav className="flex gap-10">
                 {navItems.map(item => (
                     <NavItem key={item.label} {...item} />
                 ))}

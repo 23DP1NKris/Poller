@@ -1,21 +1,27 @@
+@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Sigmar&display=swap');
 
-:root {
-    --primary-yellow: #F8F32B;
-    --primary-purple: #60074C;
-    --accent-grey: #2B2D42;
-    --text-dark: #000000;
-    --bg-white: #ffffff;
+@theme {
+    --color-primary-yellow: #F8F32B;
+    --color-primary-purple: #60074C;
+    --color-accent-grey: #2B2D42;
+    --color-text-dark: #000000;
+    --color-bg-white: #ffffff;
+
+
+    --font-poppins: "Poppins", sans-serif;
+    --font-roboto: "Roboto", sans-serif;
+    --font-sigmar: "Sigmar", serif;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+@layer base {
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-body {
-    font-family: "Roboto", sans-serif;
-    background-color: var(--bg-white);
-    color: var(--text-dark);
+    body {
+        @apply font-roboto bg-bg-white text-text-dark;
+    }
 }
