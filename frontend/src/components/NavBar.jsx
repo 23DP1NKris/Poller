@@ -13,7 +13,7 @@ function NavBar() {
         <header className="flex justify-between items-center px-15 py-7 bg-white bg-slate-100">
             <Logo />
 
-            <nav className="flex gap-10">
+            <nav className="flex gap-16">
                 {navItems.map(item => (
                     <NavItem key={item.label} {...item} />
                 ))}
