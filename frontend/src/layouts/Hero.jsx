@@ -1,17 +1,22 @@
-import HeroImage from "../components/HeroImage.jsx"
 import HeroText from "../components/HeroText.jsx"
+import WithBackgroundBtn from "../components/WithBackgroundBtn.jsx";
+import {Link} from "react-router-dom";
+import NoBackgroundBtn from "../components/NoBackgroundBtn.jsx";
 
 function Hero() {
     return (
-        <main className="flex flex-col md:flex-row justify-center items-center py-10 gap-20 lg:gap-30 max-w-350 mx-auto min-h-[70vh] px-8">
-            <div className="md:w-auto">
-                <HeroImage />
-            </div>
-
-            <div className="flex flex-col justify-center max-w-190">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 pt-16 pb-24 text-center">
                 <HeroText />
+            <div className="flex sm:flex-row items-center justify-center gap-5 pt-8">
+                <Link to="/register">
+                    <WithBackgroundBtn text="Reģistrēties"/>
+                </Link>
+
+                <Link to="/login">
+                    <NoBackgroundBtn text="Pieslēgties"/>
+                </Link>
             </div>
-        </main>
+        </div>
     )
 }
 

@@ -1,6 +1,6 @@
 function WithBackgroundBtn(props) {
     return (
-            <button onClick={props.onClick} className={`${props.color} px-9 py-[14px] text-white border-none rounded-[15px] font-bold text-[16px] cursor-pointer transition-colors duration-300 hover:opacity-90 hover:scale-102 transition-transform duration-300`}>
+            <button onClick={props.onClick} type={props.type} className="bg-primary text-white px-8 py-3.5 rounded-lg font-semibold text-sm tracking-wide hover:bg-opacity-90 shadow-lg shadow-primary/20 transition-all transform hover:-translate-y-0.5 w-full w-auto">
             {props.text}
         </button>
     )

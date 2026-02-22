@@ -5,12 +5,12 @@ const navItems = [
     {label: "Par mums", href: "/about", dropdown: ["Komanda", "Mērķis"]},
     {label: "Maksas plāni", href: "/pricing", dropdown: ["Basic", "Pro"]},
     {label: "Resursi", href: "/resources"},
-    {label: "Kontakti", href: "/contact", dropdown: ["Atbalsts", "Bizness"]},
+    {label: "Kontakti", href: "/support", dropdown: ["Atbalsts", "Bizness"]},
 ]
 
 function NavBar() {
     return (
-        <header className="flex justify-between items-center px-15 py-7 bg-white bg-slate-100">
+        <header className="flex justify-between items-center px-15 py-6 text-center">
             <Logo />
 
             <nav className="flex gap-16">

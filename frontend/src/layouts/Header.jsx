@@ -1,6 +1,6 @@
 import NavBar from "../components/NavBar.jsx"
 
-function HomeHeader() {
+function Header() {
     return (
         <>
             <NavBar />
@@ -8,4 +8,4 @@ function HomeHeader() {
     )
 }
 
-export default HomeHeader
+export default Header

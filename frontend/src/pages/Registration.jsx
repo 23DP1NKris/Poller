@@ -1,14 +1,12 @@
-import { useState } from 'react'
-import WithBackgroundBtn from "../components/WithBackgroundBtn.jsx"
-import AuthInput from "../components/AuthInput.jsx"
-import email_icon from "../assets/images/email_icon.png"
+import {useState} from 'react'
+import OutlineBtn from "../components/OutlineBtn.jsx"
+import Logo from "../components/Logo.jsx"
+import {Link} from "react-router-dom"
 import google_icon from "../assets/images/google_icon.png"
-import microsoft_icon from "../assets/images/microsoft_icon.png"
-import {Link} from "react-router-dom";
-import OutlineBtn from "../components/OutlineBtn.jsx";
-import Logo from "../components/Logo.jsx";
+import ms_icon from "../assets/images/microsoft_icon.png"
 import AuthBtn from "../components/AuthBtn.jsx";
-import IsThereAnIssue from "../components/IsThereAnIssue.jsx";
+import WithBackgroundBtn from "../components/WithBackgroundBtn.jsx";
+import LargeInput from "../components/LargeInput.jsx";
 
 function Registration() {
     const [view, setView] = useState('choice')
@@ -16,68 +14,102 @@ function Registration() {
     const handleEmailRegister = async (e) => {
         e.preventDefault()
 
-    //     api call from backend here (also prevent php intervention xd)
+    //     api call from backend here also prevent php intervention
     }
 
     return (
-        // auth with google or ms
-        <div className="flex min-h-screen">
-            <div className="w-3/5 flex flex-col items-center bg-white p-2">
-                <div className="flex gap-3 w-full align-center place-content-between">
-                    <div className="w-full flex items-center gap-4">
-                        <h3 className="text-gray-500 text-lg whitespace-nowrap">
-                            Jau esi reģistrējies?
-                        </h3>
-
-                        <Link to="/login">
-                            <OutlineBtn text="Pieslēgties" />
-                        </Link>
-                    </div>
-
-                </div>
-
-                <div className="mt-[15vh] mb-[5vh]">
-                    <Link to="/">
-                        <Logo />
+        <div className="flex min-h-screen w-full flex-col lg:flex-row">
+            <div className="relative w-full lg:flex-1 bg-white flex flex-col">
+                <div className="m-4 flex justify-end items-center gap-3">
+                    <h3 className="text-base text-gray-500">Jums jau ir konts?</h3>
+                    <Link to="/login">
+                        <OutlineBtn text="Pieslēgties"/>
                     </Link>
+
                 </div>
 
+                <div className="flex-1 flex flex-col justify-center items-center px-8 sm:px-16 lg:px-24 py-2">
+                    <Logo />
 
-                {view === 'choice' ? (
-                    <div className="w-full max-w-sm space-y-4">
-                        <AuthBtn onClick={() => setView('email')} img={email_icon} text="Pievienoties ar E-pastu"/>
-                        <h3 className="text-center text-gray-400 text-sm">vai arī</h3>
-                        <AuthBtn img={google_icon} text="Pievienoties ar Google"/>
-                        <AuthBtn img={microsoft_icon} text="Pievienoties ar Microsoft"/>
-                    </div>
+                    <div className="w-full mt-6">
+                        <h2 className="text-2xl font-bold text-gray-900 mb-1 text-center">Izveido savu profilu</h2>
+                        <p className="text-gray-500 text-sm mb-8 text-center">Sāc iepazīt savu mērķauditoriju jau tagad</p>
 
-                ) : (
-                    // auth with email
-                    <form onSubmit={handleEmailRegister} className="w-full max-w-sm space-y-4 flex flex-col items-center">
-                        <AuthInput name="email" type="email" placeholder="E-pasts" autoComplete="off" />
-                        <AuthInput name="password" type="password" placeholder="Parole"/>
-                        <AuthInput name="confirm_password" type="password" placeholder="Atkārtot paroli" />
+                        <form className="space-y-5">
+                            <LargeInput
+                                htmlFor="username"
+                                text="Lietotājvārds"
+                                placeholder="Jānis Bērziņš"
+                                id="username"
+                                type="text"
+                            />
 
-                        <div className="mt-5 w-full flex justify-center">
-                            <WithBackgroundBtn text="Reģistrēties" color="bg-primary-purple"/>
+                            <LargeInput
+                                htmlFor="email"
+                                text="E-pasta adrese"
+                                placeholder="janis@epasts.com"
+                                id="email"
+                                type="email"
+                            />
+
+                            <LargeInput
+                                htmlFor="password"
+                                text="Parole"
+                                placeholder="••••••••"
+                                id="password"
+                                type="password"
+                            />
+
+                            <WithBackgroundBtn
+                                text="Turpināt"
+                                type="submit"
+                            />
+                        </form>
+
+                        <div className="relative my-4">
+                            <div className="absolute inset-0 flex items-center">
+                                <div className="w-full border-t border-gray-200"></div>
+                            </div>
+                            <div className="relative flex justify-center text-sm">
+                                <span className="bg-white px-4 text-gray-400">vai arī</span>
+                            </div>
                         </div>
 
-                        <button
-                            onClick={() => setView('choice')}
-                            className="text-sm text-gray-500 mt-4 transition duration-150 cursor-pointer hover:text-gray-800 hover:scale-103">
-                            Atpakaļ
-                        </button>
-                    </form>
-                )}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <AuthBtn
+                                image={google_icon}
+                                text="Reģistrēties ar Google"
+                            />
+                            <AuthBtn
+                                image={ms_icon}
+                                text="Reģistrēties ar Microsoft"
+                            />
+                        </div>
+                    </div>
 
-                <IsThereAnIssue />
-            </div>
+                    <div className="mt-8 text-center">
+                        <p className="text-xs text-gray-400">
+                            <p className="text-sm text-gray-700 mb-2">Vai ir radusies kļūda? <span className="font-semibold cursor-pointer">Atbalsts</span></p>
+                            Reģistrējoties Jūs piekrītat
+                            <a className="text-gray-600 hover:text-primary underline decoration-gray-300 underline-offset-2"
+                               href="#"> Lietošanas noteikumiem </a> un
+                            <a className="text-gray-600 hover:text-primary underline decoration-gray-300 underline-offset-2"
+                               href="#"> Privātuma politikai</a>.
+                        </p>
+                    </div>
 
-            <div className="w-2/5 bg-[#2D2E3E] flex flex-col items-center justify-center text-white">
-                <div className="w-128 h-128 bg-pink-500 rounded-3xl mb-6 flex items-center justify-center">
-                    <img src="../assets/images/registersomething" alt="some image or gif" />
                 </div>
-                <h2 className="text-2xl font-semibold">Pievienojies - tas ir par brīvu!</h2>
+            </div>
+            <div className="hidden xl:flex relative xl:w-2/5 xl:flex-none bg-accent-gray flex-col items-center justify-between p-12 overflow-hidden min-h-screen">
+                <div className="hidden lg:block"></div>
+
+                <div className="flex flex-col items-center text-center">
+                    <div className="bg-yellow-300 w-110 h-110 rounded-2xl shadow-lg flex"></div>
+                    <h1 className="mt-6 text-2xl font-bold text-gray-200 ">Pievienojies - tas ir par brīvu!</h1>
+                    <h2 className="mt-1 text-base font-semibold text-gray-500">Veido lieliskas aptaujas un iegūsti atbildes jau tūlīt</h2>
+                </div>
+
+                <span className="text-sm text-gray-300 mt-8">&copy; Poller 2026</span>
             </div>
         </div>
     )
