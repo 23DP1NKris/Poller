@@ -3,6 +3,7 @@ import App from '../App.jsx'
 import Dashboard from "../pages/Dashboard.jsx"
 import Registration from "../pages/Registration.jsx"
 import Login from "../pages/Login.jsx"
+import Support from "../pages/Support.jsx";
 
 export const router = createBrowserRouter([
     {
@@ -19,5 +20,9 @@ export const router = createBrowserRouter([
     },
     {   path: '/login',
         element: <Login />
+    },
+    {
+        path: '/support',
+        element: <Support />
     }
 ])

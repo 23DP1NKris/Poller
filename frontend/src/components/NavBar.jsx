@@ -5,7 +5,7 @@ const navItems = [
     {label: "Par mums", href: "/about", dropdown: ["Komanda", "Mērķis"]},
     {label: "Maksas plāni", href: "/pricing", dropdown: ["Basic", "Pro"]},
     {label: "Resursi", href: "/resources"},
-    {label: "Kontakti", href: "/support", dropdown: ["Atbalsts", "Bizness"]},
+    {label: "Atbalsts", href: "/support", dropdown: ["Kontakti", "Biežak uzdotie jautājumi"]},
 ]
 
 function NavBar() {

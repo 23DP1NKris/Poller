@@ -30,7 +30,14 @@ function Login() {
             </div>
 
             <div className="relative w-full lg:flex-1 bg-white flex flex-col">
-                <div className="flex-1 flex flex-col justify-center items-center px-4 sm:px-16 lg:px-28 py-6 lg:py-24">
+                <div className="m-4 flex justify-end items-center gap-3">
+                    <h3 className="text-base text-gray-500">Vēl neesat reģistrējušies?</h3>
+                    <Link to="/register">
+                        <OutlineBtn text="Reģistrēties"/>
+                    </Link>
+
+                </div>
+                <div className="flex-1 flex flex-col justify-center items-center px-4 sm:px-16 lg:px-28 py-6">
                     <Logo />
 
                     <div className="w-full mt-6">
@@ -82,7 +89,9 @@ function Login() {
                     </div>
 
                     <div className=" mt-25 lg:mt-12 text-center">
-                        <p className="text-sm text-gray-600">Vai ir radusies kļūda? <span className="font-semibold cursor-pointer hover:text-gray-800 duration-200">Atbalsts</span></p>
+                        <p className="text-sm text-gray-600">Vai ir radusies kļūda?
+                            <Link to={'/support'}><span className="font-semibold cursor-pointer hover:text-gray-800 duration-200"> Atbalsts</span></Link>
+                        </p>
                     </div>
 
                 </div>

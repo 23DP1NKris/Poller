@@ -25,7 +25,6 @@ function Registration() {
                     <Link to="/login">
                         <OutlineBtn text="Pieslēgties"/>
                     </Link>
-
                 </div>
 
                 <div className="flex-1 flex flex-col justify-center items-center px-8 sm:px-16 lg:px-24 py-2">
@@ -109,7 +108,7 @@ function Registration() {
                     <h2 className="mt-1 text-base font-semibold text-gray-500">Veido lieliskas aptaujas un iegūsti atbildes jau tūlīt</h2>
                 </div>
 
-                <span className="text-sm text-gray-300 mt-8">&copy; Poller 2026</span>
+                <span className="text-sm text-gray-300 mt-8 font-semibold">&copy; Poller 2026</span>
             </div>
         </div>
     )
