@@ -5,7 +5,7 @@ function FAQItem(props) {
     const [isOpen, setIsOpen] = useState(false)
 
     return (
-        <div className="border border-gray-300 rounded-xl overflow-hidden bg-gray-100">
+        <div className="border border-gray-300 rounded-xl overflow-hidden bg-gray-100 cursor-pointer">
             <div>
                 <button onClick={() => setIsOpen(!isOpen)} className="w-full px-6 py-5 flex flex items-center justify-between text-left group">
                     <span className="font-bold group-hover:text-primary transition-colors">{props.question}</span>

@@ -7,11 +7,13 @@ import mail_icon from "../assets/images/mail_icon.png"
 import {Link} from "react-router-dom"
 import WithBackgroundBtn from "../components/WithBackgroundBtn.jsx"
 import FAQItem from "../components/FAQItem.jsx"
+import Footer from "../layouts/Footer.jsx";
 
 function Support() {
     return (
         <>
-        {/*<Header />*/}
+        <Header />
+
         <div className="flex-1 mx-auto w-full px-6 py-12">
             <section className="text-center mb-16">
                 <h1 className="font-bold text-4xl leading-tight mb-6">Kā mēs Jums varam palīdzēt?</h1>
@@ -126,8 +128,10 @@ function Support() {
                 </div>
             </section>
         </div>
+
+        <Footer />
         </>
-)
+    )
 }
 
 export default Support
