@@ -1,5 +1,5 @@
-import Header from "../layouts/Header.jsx";
-import Hero from "../layouts/Hero.jsx";
+import Header from "../layouts/Header.jsx"
+import Hero from "../layouts/Hero.jsx"
 
 function Home() {
     return (

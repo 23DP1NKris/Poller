@@ -7,7 +7,7 @@ import mail_icon from "../assets/images/mail_icon.png"
 import {Link} from "react-router-dom"
 import WithBackgroundBtn from "../components/WithBackgroundBtn.jsx"
 import FAQItem from "../components/FAQItem.jsx"
-import Footer from "../layouts/Footer.jsx";
+import Footer from "../layouts/Footer.jsx"
 
 function Support() {
     return (

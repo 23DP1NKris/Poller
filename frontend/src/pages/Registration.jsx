@@ -4,9 +4,9 @@ import Logo from "../components/Logo.jsx"
 import {Link} from "react-router-dom"
 import google_icon from "../assets/images/google_icon.png"
 import ms_icon from "../assets/images/microsoft_icon.png"
-import AuthBtn from "../components/AuthBtn.jsx";
-import WithBackgroundBtn from "../components/WithBackgroundBtn.jsx";
-import LargeInput from "../components/LargeInput.jsx";
+import AuthBtn from "../components/AuthBtn.jsx"
+import WithBackgroundBtn from "../components/WithBackgroundBtn.jsx"
+import LargeInput from "../components/LargeInput.jsx"
 
 function Registration() {
     const [view, setView] = useState('choice')
