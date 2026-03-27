@@ -1,7 +1,8 @@
-import {useState} from 'react'
+import { useState } from 'react'
+import axios from 'axios'
+import { Link, useNavigate } from 'react-router-dom'
 import OutlineBtn from "../components/OutlineBtn.jsx"
 import Logo from "../components/Logo.jsx"
-import {Link} from "react-router-dom"
 import google_icon from "../assets/images/google_icon.png"
 import ms_icon from "../assets/images/microsoft_icon.png"
 import AuthBtn from "../components/AuthBtn.jsx"
@@ -9,12 +10,35 @@ import WithBackgroundBtn from "../components/WithBackgroundBtn.jsx"
 import LargeInput from "../components/LargeInput.jsx"
 
 function Registration() {
-    const [view, setView] = useState('choice')
+    const navigate = useNavigate()
+    const [loading, setLoading] = useState(false)
+    const [formData, setFormData] = useState({
+        username: "",
+        email: "",
+        password: ""
+    })
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.id]: e.target.value
+        })
+    }
 
     const handleEmailRegister = async (e) => {
         e.preventDefault()
+        setLoading(true)
 
-    //     api call from backend here also prevent php intervention
+        try {
+            await axios.post('http://127.0.0.1:8000/api/register', formData)
+            navigate('/dashboard')
+        } catch (error) {
+            console.error("Registration failed:", error.response?.data)
+            alert("Kļūda reģistrācijā. Mēģiniet vēlreiz.")
+            setLoading(false)
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
@@ -34,13 +58,15 @@ function Registration() {
                         <h2 className="text-2xl font-bold text-gray-900 mb-1 text-center">Izveido savu profilu</h2>
                         <p className="text-gray-500 text-sm mb-8 text-center">Sāc iepazīt savu mērķauditoriju jau tagad</p>
 
-                        <form className="space-y-5">
+                        <form className="space-y-5" onSubmit={handleEmailRegister}>
                             <LargeInput
                                 htmlFor="username"
                                 text="Lietotājvārds"
                                 placeholder="Jānis Bērziņš"
                                 id="username"
                                 type="text"
+                                value={formData.username}
+                                onChange={handleChange}
                             />
 
                             <LargeInput
@@ -49,6 +75,8 @@ function Registration() {
                                 placeholder="janis@epasts.com"
                                 id="email"
                                 type="email"
+                                value={formData.email}
+                                onChange={handleChange}
                             />
 
                             <LargeInput
@@ -57,10 +85,12 @@ function Registration() {
                                 placeholder="••••••••"
                                 id="password"
                                 type="password"
+                                value={formData.password}
+                                onChange={handleChange}
                             />
 
                             <WithBackgroundBtn
-                                text="Turpināt"
+                                text={loading ? "Lādējas..." : "Turpināt"}
                                 type="submit"
                             />
                         </form>
@@ -86,14 +116,12 @@ function Registration() {
                         </div>
                     </div>
 
-                    <div className="mt-8 text-center">
-                        <p className="text-xs text-gray-400">
-                            <p className="text-sm text-gray-700 mb-2">Vai ir radusies kļūda? <span className="font-semibold cursor-pointer">Atbalsts</span></p>
+                    <div className="mt-8 text-center text-xs text-gray-400">
+                        <p className="text-sm text-gray-700 mb-2">Vai ir radusies kļūda? <span className="font-semibold cursor-pointer">Atbalsts</span></p>
+                        <p>
                             Reģistrējoties Jūs piekrītat
-                            <a className="text-gray-600 hover:text-primary underline decoration-gray-300 underline-offset-2"
-                               href="#"> Lietošanas noteikumiem </a> un
-                            <a className="text-gray-600 hover:text-primary underline decoration-gray-300 underline-offset-2"
-                               href="#"> Privātuma politikai</a>.
+                            <a className="text-gray-600 hover:text-primary underline decoration-gray-300 underline-offset-2 mx-1" href="#">Lietošanas noteikumiem</a> un
+                            <a className="text-gray-600 hover:text-primary underline decoration-gray-300 underline-offset-2 mx-1" href="#">Privātuma politikai</a>
                         </p>
                     </div>
 
