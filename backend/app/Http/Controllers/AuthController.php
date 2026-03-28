@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -15,6 +16,7 @@ class AuthController extends Controller
             'password' => 'required|string|min:8',
         ]);
 
+
         $user = User::create([
             'username' => $data['username'],
             'email' => $data['email'],
@@ -23,6 +25,33 @@ class AuthController extends Controller
             'bio' => null,
         ]);
 
-        return response()->json(['message' => 'Lietotājs izveidots', 'user' => $user], 201);
+        $token = $user->createToken('poller-token')->plainTextToken;
+
+        return response([
+            'user' => $user,
+            'token' => $token
+        ], 201);
+    }
+
+    public function login(Request $request) {
+        $data = $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string'
+        ]);
+
+        $user = User::where('email', $data['email'])->first();
+
+        if (!$user || !Hash::check($data['password'], $user->password)) {
+            return response([
+                'message' => 'Nepareizs lietotājvārds vai parole'
+            ]);
+        }
+
+        $token = $user->createToken('poller-token')->plainTextToken;
+
+        return response([
+            'user' => $user,
+            'token' => $token
+        ]);
     }
 }

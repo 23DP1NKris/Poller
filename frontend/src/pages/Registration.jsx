@@ -30,12 +30,15 @@ function Registration() {
         setLoading(true)
 
         try {
-            await axios.post('http://127.0.0.1:8000/api/register', formData)
-            navigate('/dashboard')
+            const response = await axios.post('http://127.0.0.1:8000/api/register', formData)
+
+            if (response.data.token) {
+                localStorage.setItem('token', response.data.token)
+                navigate('/dashboard')
+            }
         } catch (error) {
             console.error("Registration failed:", error.response?.data)
             alert("Kļūda reģistrācijā. Mēģiniet vēlreiz.")
-            setLoading(false)
         } finally {
             setLoading(false)
         }

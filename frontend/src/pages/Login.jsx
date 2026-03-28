@@ -1,5 +1,6 @@
-import {useState} from "react"
-import {Link} from "react-router-dom"
+import { useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import axios from 'axios'
 import OutlineBtn from "../components/OutlineBtn.jsx"
 import Logo from "../components/Logo.jsx"
 import AuthBtn from "../components/AuthBtn.jsx"
@@ -9,24 +10,47 @@ import LargeInput from "../components/LargeInput.jsx"
 import WithBackgroundBtn from "../components/WithBackgroundBtn.jsx"
 
 function Login() {
-    const [view, setView] = useState('choice')
+    const navigate = useNavigate()
+    const [loading, setLoading] = useState(false)
+    const [formData, setFormData] = useState({
+        email: "",
+        password: ""
+    })
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.id]: e.target.value
+        })
+    }
 
     const handleEmailLogin = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
+        setLoading(true);
 
-    //     more api stuff
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/api/login', formData);
+
+            localStorage.setItem('token', response.data.token);
+            navigate('/dashboard');
+        } catch (error) {
+            console.error("Login Error:", error.response?.data);
+            alert(error.response?.data?.message || "Nepareizs e-pasts vai parole.")
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
         <div className="flex min-h-screen w-full flex-col lg:flex-row">
             <div className="hidden xl:flex relative xl:w-2/5 xl:flex-none bg-purple-100 flex-col justify-between p-12 overflow-hidden min-h-screen">
-                    <div className="hidden lg:block"></div>
+                <div className="hidden lg:block"></div>
 
-                    <div className="flex flex-col items-center text-center">
-                        <div className="bg-blue-300 w-110 h-110 rounded-2xl shadow-lg flex"></div>
-                        <h1 className="mt-6 text-2xl font-bold text-slate-600 ">Veic labākas izvēles. Kopā.</h1>
-                    </div>
-                    <span className="text-sm font-semibold text-gray-600 mt-8 text-center">&copy; Poller 2026</span>
+                <div className="flex flex-col items-center text-center">
+                    <div className="bg-blue-300 w-110 h-110 rounded-2xl shadow-lg flex"></div>
+                    <h1 className="mt-6 text-2xl font-bold text-slate-600 ">Veic labākas izvēles. Kopā.</h1>
+                </div>
+                <span className="text-sm font-semibold text-gray-600 mt-8 text-center">&copy; Poller 2026</span>
             </div>
 
             <div className="relative w-full lg:flex-1 bg-white flex flex-col">
@@ -35,8 +59,8 @@ function Login() {
                     <Link to="/register">
                         <OutlineBtn text="Reģistrēties"/>
                     </Link>
-
                 </div>
+
                 <div className="flex-1 flex flex-col justify-center items-center px-4 sm:px-16 lg:px-28 py-6">
                     <Logo />
 
@@ -44,13 +68,15 @@ function Login() {
                         <h2 className="text-2xl font-bold text-gray-900 mb-1 text-center">Prieks tevi redzēt atkal!</h2>
                         <p className="text-gray-500 text-sm mb-8 text-center">Ievadi savus lietotāja datus, lai pieslēgtos.</p>
 
-                        <form className="space-y-5">
+                        <form className="space-y-5" onSubmit={handleEmailLogin}>
                             <LargeInput
                                 htmlFor="email"
                                 text="E-pasta adrese"
                                 placeholder="janis@epasts.com"
                                 id="email"
                                 type="email"
+                                value={formData.email}
+                                onChange={handleChange}
                             />
 
                             <LargeInput
@@ -59,10 +85,12 @@ function Login() {
                                 placeholder="••••••••"
                                 id="password"
                                 type="password"
+                                value={formData.password}
+                                onChange={handleChange}
                             />
 
                             <WithBackgroundBtn
-                                text="Turpināt"
+                                text={loading ? "Pieslēdzas..." : "Turpināt"}
                                 type="submit"
                             />
                         </form>
@@ -93,11 +121,7 @@ function Login() {
                             <Link to={'/support'}><span className="font-semibold cursor-pointer hover:text-gray-800 duration-200"> Atbalsts</span></Link>
                         </p>
                     </div>
-
                 </div>
-
-
-
             </div>
         </div>
     )
