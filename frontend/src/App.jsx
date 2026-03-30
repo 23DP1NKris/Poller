@@ -1,9 +1,9 @@
-import Home from "./pages/Home.jsx"
+import LandingPage from "./pages/LandingPage.jsx"
 
 function App() {
   return (
     <>
-      <Home />
+      <LandingPage />
     </>
   )
 }
