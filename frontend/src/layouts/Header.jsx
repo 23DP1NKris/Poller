@@ -10,7 +10,7 @@ function Header() {
     return (
         <header className="relative flex justify-between items-center px-6 md:px-15 py-6 bg-white z-50">
             <button
-                className="md:hidden z-[60] relative pointer-events-auto mr-4"
+                className="md:hidden z-60 relative pointer-events-auto mr-4"
                 onClick={() => setIsOpen(!isOpen)}
                 aria-label="Toggle menu"
             >
@@ -65,7 +65,7 @@ function Header() {
                     </div>
                 </div>
 
-                <a href="/resources" className="text-xl md:text-base text-[#333] font-medium hover:text-primary-purple">Funkcijas</a>
+                <a href="/functions" className="text-xl md:text-base text-[#333] font-medium hover:text-primary-purple">Funkcijas</a>
 
                 <div className="relative group cursor-pointer text-center">
                     <div className="flex items-center justify-center md:justify-start gap-1">

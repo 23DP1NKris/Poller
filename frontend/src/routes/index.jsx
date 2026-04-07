@@ -3,7 +3,8 @@ import App from '../App.jsx'
 import Home from "../pages/Home.jsx"
 import Registration from "../pages/Registration.jsx"
 import Login from "../pages/Login.jsx"
-import Support from "../pages/Support.jsx";
+import Support from "../pages/Support.jsx"
+import Settings from "../pages/Settings.jsx"
 
 export const router = createBrowserRouter([
     {
@@ -24,5 +25,9 @@ export const router = createBrowserRouter([
     {
         path: '/support',
         element: <Support />
+    },
+    {
+        path: '/settings',
+        element: <Settings />
     }
 ])

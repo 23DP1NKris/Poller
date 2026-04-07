@@ -32,7 +32,7 @@ function Login() {
             const response = await axios.post('http://127.0.0.1:8000/api/login', formData);
 
             localStorage.setItem('token', response.data.token);
-            navigate('/dashboard');
+            navigate('/home');
         } catch (error) {
             console.error("Login Error:", error.response?.data);
             alert(error.response?.data?.message || "Nepareizs e-pasts vai parole.")

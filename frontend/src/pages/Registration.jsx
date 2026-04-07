@@ -34,7 +34,7 @@ function Registration() {
 
             if (response.data.token) {
                 localStorage.setItem('token', response.data.token)
-                navigate('/dashboard')
+                navigate('/home')
             }
         } catch (error) {
             console.error("Registration failed:", error.response?.data)

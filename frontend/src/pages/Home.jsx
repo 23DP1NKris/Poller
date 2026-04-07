@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
+import Sidebar from "../layouts/Sidebar.jsx"
 
 function Home() {
     const navigate = useNavigate()
@@ -44,7 +45,7 @@ function Home() {
     }
 
     return (
-        <h1 className="text-3xl font-bold text-gray-900">Labdien, {user?.username}!</h1>
+        <Sidebar />
     )
 }
 
