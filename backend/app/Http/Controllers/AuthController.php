@@ -8,8 +8,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
-    {
+    public function register(Request $request) {
         $data = $request->validate([
             'username' => 'required|string|unique:users|max:50',
             'email' => 'required|string|email|unique:users',
@@ -20,7 +19,7 @@ class AuthController extends Controller
         $user = User::create([
             'username' => $data['username'],
             'email' => $data['email'],
-            'password' => $data['password'],
+            'password' => Hash::make($data['password']),
             'role' => 'user',
             'bio' => null,
         ]);
@@ -53,5 +52,14 @@ class AuthController extends Controller
             'user' => $user,
             'token' => $token
         ]);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response([
+            'message' => 'Izrakstīšanās ir veiksmīga'
+        ], 200);
     }
 }

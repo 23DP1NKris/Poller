@@ -6,8 +6,28 @@ import settings_icon from "../assets/images/user_settings_icon.png"
 import support_icon from "../assets/images/support_icon.png"
 import logout_icon from "../assets/images/logout.png"
 import Logo from "../components/Logo.jsx"
+import axios from 'axios'
+import {Link} from "react-router-dom";
 
 function Sidebar() {
+    const handleLogout = async () => {
+        const token = localStorage.getItem('token')
+
+        try {
+            await axios.post('http://127.0.0.1:8000/api/logout', {}, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json'
+                }
+            })
+        } catch (error) {
+            console.error("Logout error:", error)
+        } finally {
+            localStorage.removeItem('token')
+            window.location.href = '/login'
+        }
+    }
+
     const path = window.location.pathname
 
     const isActive = (href) => path === href
@@ -20,9 +40,9 @@ function Sidebar() {
             </div>
 
             <nav className="flex-1 px-4 py-6 space-y-2">
-                <a
-                    href="/home"
-                    className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 ease-in-out ${isActive("/home") ? "bg-primary/10 text-primary" : "text-accent-gray hover:bg-gray-200"}`}
+                <Link
+                    to="/home"
+                    className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 ease-in-out ${isActive("/home") ? "bg-primary/10 text-primary border-r-5 border-primary" : "text-accent-gray hover:bg-gray-200"}`}
                 >
                     <img
                         src={home_icon}
@@ -31,11 +51,11 @@ function Sidebar() {
                         style={isActive("/home") ? { filter: "invert(11%) sepia(68%) saturate(4529%) hue-rotate(298deg) brightness(85%) contrast(106%)" } : {}}
                     />
                     <span className="font-semibold tracking-wide text-sm">Sākums</span>
-                </a>
+                </Link>
 
-                <a
-                    href="/results"
-                    className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 ease-in-out ${isActive("/results") ? "bg-primary/10 text-primary" : "text-accent-gray hover:bg-gray-200"}`}
+                <Link
+                    to="/results"
+                    className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 ease-in-out ${isActive("/results") ? "bg-primary/10 text-primary border-r-5 border-primary" : "text-accent-gray hover:bg-gray-200"}`}
                 >
                     <img
                         src={results_icon}
@@ -44,11 +64,11 @@ function Sidebar() {
                         style={isActive("/results") ? { filter: "invert(11%) sepia(68%) saturate(4529%) hue-rotate(298deg) brightness(85%) contrast(106%)" } : {}}
                     />
                     <span className="font-semibold tracking-wide text-sm">Rezultāti</span>
-                </a>
+                </Link>
 
-                <a
-                    href="/active-polls"
-                    className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 ease-in-out ${isActive("/active-polls") ? "bg-primary/10 text-primary" : "text-accent-gray hover:bg-gray-200"}`}
+                <Link
+                    to="/active-polls"
+                    className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 ease-in-out ${isActive("/active-polls") ? "bg-primary/10 text-primary border-r-5 border-primary" : "text-accent-gray hover:bg-gray-200"}`}
                 >
                     <img
                         src={active_polls_icon}
@@ -57,11 +77,11 @@ function Sidebar() {
                         style={isActive("/active-polls") ? { filter: "invert(11%) sepia(68%) saturate(4529%) hue-rotate(298deg) brightness(85%) contrast(106%)" } : {}}
                     />
                     <span className="font-semibold tracking-wide text-sm">Aktīvās aptaujas</span>
-                </a>
+                </Link>
 
-                <a
-                    href="/settings"
-                    className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 ease-in-out ${isActive("/settings") ? "bg-primary/10 text-primary" : "text-accent-gray hover:bg-gray-200"}`}
+                <Link
+                    to="/settings"
+                    className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 ease-in-out ${isActive("/settings") ? "bg-primary/10 text-primary border-r-5 border-primary" : "text-accent-gray hover:bg-gray-200"}`}
                 >
                     <img
                         src={settings_icon}
@@ -70,10 +90,10 @@ function Sidebar() {
                         style={isActive("/settings") ? { filter: "invert(11%) sepia(68%) saturate(4529%) hue-rotate(298deg) brightness(85%) contrast(106%)" } : {}}
                     />
                     <span className="font-semibold tracking-wide text-sm">Iestatījumi</span>
-                </a>
+                </Link>
 
-                <a
-                    href="/support"
+                <Link
+                    to="/support"
                     className="w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 ease-in-out hover:bg-gray-200"
                 >
                     <img
@@ -82,17 +102,17 @@ function Sidebar() {
                         className="w-6 h-6 object-contain transition-all duration-200"
                     />
                     <span className="font-semibold tracking-wide text-sm">Atbalsts</span>
-                </a>
+                </Link>
             </nav>
 
             <div className="p-4 border-t border-gray-200/60 mt-auto">
-                <a
-                    href=""
+                <button
+                    onClick={handleLogout}
                     className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-accent-gray hover:bg-gray-200 transition-all duration-200"
                 >
                     <img src={logout_icon} alt="Iziet" className="w-6 h-6 object-contain opacity-75" />
                     <span className="font-semibold tracking-wide text-sm">Iziet</span>
-                </a>
+                </button>
             </div>
 
         </aside>
