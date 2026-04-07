@@ -9,7 +9,7 @@ function FAQItem(props) {
             <div>
                 <button onClick={() => setIsOpen(!isOpen)} className="w-full px-6 py-5 flex flex items-center justify-between text-left group">
                     <span className="font-bold group-hover:text-primary transition-colors">{props.question}</span>
-                    <img src={dropdown_arrow} alt="dropdown toggle" className={`h-5 w-5 object-contain transition-transform duration-400 ${isOpen ? "rotate-180" : "rotate-0"}`}/>
+                    <img src={dropdown_arrow} alt="Atbilde uz jautājumu" className={`h-5 w-5 object-contain transition-transform duration-400 ${isOpen ? "rotate-180" : "rotate-0"}`}/>
                 </button>
             </div>
             <div hidden={!isOpen} className="px-6 pb-5 text-gray-600 text-sm leading-relaxed">

@@ -26,7 +26,7 @@ function Sidebar() {
                 >
                     <img
                         src={home_icon}
-                        alt="Home"
+                        alt="Sākums"
                         className={`w-6 h-6 object-contain transition-all duration-200 ${isActive("/home") ? "" : "opacity-75"}`}
                         style={isActive("/home") ? { filter: "invert(11%) sepia(68%) saturate(4529%) hue-rotate(298deg) brightness(85%) contrast(106%)" } : {}}
                     />
@@ -39,7 +39,7 @@ function Sidebar() {
                 >
                     <img
                         src={results_icon}
-                        alt="Results"
+                        alt="Rezultāti"
                         className={`w-6 h-6 object-contain transition-all duration-200 ${isActive("/results") ? "" : "opacity-75"}`}
                         style={isActive("/results") ? { filter: "invert(11%) sepia(68%) saturate(4529%) hue-rotate(298deg) brightness(85%) contrast(106%)" } : {}}
                     />
@@ -52,7 +52,7 @@ function Sidebar() {
                 >
                     <img
                         src={active_polls_icon}
-                        alt="Active polls"
+                        alt="Aktīvās aptaujas"
                         className={`w-6 h-6 object-contain transition-all duration-200 ${isActive("/active-polls") ? "" : "opacity-75"}`}
                         style={isActive("/active-polls") ? { filter: "invert(11%) sepia(68%) saturate(4529%) hue-rotate(298deg) brightness(85%) contrast(106%)" } : {}}
                     />
@@ -65,7 +65,7 @@ function Sidebar() {
                 >
                     <img
                         src={settings_icon}
-                        alt="Settings"
+                        alt="Iestatījumi"
                         className={`w-6 h-6 object-contain transition-all duration-200 ${isActive("/settings") ? "" : "opacity-75"}`}
                         style={isActive("/settings") ? { filter: "invert(11%) sepia(68%) saturate(4529%) hue-rotate(298deg) brightness(85%) contrast(106%)" } : {}}
                     />
@@ -78,7 +78,7 @@ function Sidebar() {
                 >
                     <img
                         src={support_icon}
-                        alt="Support"
+                        alt="Atbalsts"
                         className="w-6 h-6 object-contain transition-all duration-200"
                     />
                     <span className="font-semibold tracking-wide text-sm">Atbalsts</span>
@@ -90,7 +90,7 @@ function Sidebar() {
                     href=""
                     className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-accent-gray hover:bg-gray-200 transition-all duration-200"
                 >
-                    <img src={logout_icon} alt="Logout" className="w-6 h-6 object-contain opacity-75" />
+                    <img src={logout_icon} alt="Iziet" className="w-6 h-6 object-contain opacity-75" />
                     <span className="font-semibold tracking-wide text-sm">Iziet</span>
                 </a>
             </div>

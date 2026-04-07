@@ -16,7 +16,7 @@ function Header() {
             >
                 <img
                     src={isOpen ? close_menu_icon : burger_menu_icon}
-                    alt={isOpen ? "Close menu" : "Open menu"}
+                    alt={isOpen ? "Aizvērt izvēlni" : "Atvērt izvēlni"}
                     className="w-8 h-8 object-contain transition-all duration-300"
                 />
             </button>
@@ -38,7 +38,7 @@ function Header() {
                     </div>
                     <div className="flex items-center justify-center md:justify-start gap-1">
                         <a href="/about" className="text-xl md:text-base text-[#333] font-medium hover:text-primary-purple">Par mums</a>
-                        <img src={dropdown_arrow} alt="dropdown toggle" className="h-5 w-5 object-contain transition-transform duration-400 group-hover:rotate-180 hidden md:block" />
+                        <img src={dropdown_arrow} alt="Par mums izvēlne" className="h-5 w-5 object-contain transition-transform duration-400 group-hover:rotate-180 hidden md:block" />
                     </div>
                     <div className="md:hidden flex flex-col gap-2 mt-2">
                         <a href="#" className="text-gray-500 text-sm">Komanda</a>
@@ -53,7 +53,7 @@ function Header() {
                 <div className="relative group cursor-pointer text-center">
                     <div className="flex items-center justify-center md:justify-start gap-1">
                         <a href="/pricing" className="text-xl md:text-base text-[#333] font-medium hover:text-primary-purple">Maksas plāni</a>
-                        <img src={dropdown_arrow} alt="dropdown toggle" className="h-5 w-5 object-contain transition-transform duration-400 group-hover:rotate-180 hidden md:block" />
+                        <img src={dropdown_arrow} alt="Maksas plānu izvēlne" className="h-5 w-5 object-contain transition-transform duration-400 group-hover:rotate-180 hidden md:block" />
                     </div>
                     <div className="md:hidden flex flex-col gap-2 mt-2">
                         <a href="/pricing" className="text-gray-500 text-sm">Basic</a>
@@ -70,7 +70,7 @@ function Header() {
                 <div className="relative group cursor-pointer text-center">
                     <div className="flex items-center justify-center md:justify-start gap-1">
                         <a href="/support" className="text-xl md:text-base text-[#333] font-medium hover:text-primary-purple">Atbalsts</a>
-                        <img src={dropdown_arrow} alt="dropdown toggle" className="h-5 w-5 object-contain transition-transform duration-400 group-hover:rotate-180 hidden md:block" />
+                        <img src={dropdown_arrow} alt="Atbalsta izvēlne" className="h-5 w-5 object-contain transition-transform duration-400 group-hover:rotate-180 hidden md:block" />
                     </div>
                     <div className="md:hidden flex flex-col gap-2 mt-2">
                         <a href="/support" className="text-gray-500 text-sm">Kontakti</a>

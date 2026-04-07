@@ -20,7 +20,7 @@ function Support() {
                 <div className="max-w-2xl mx-auto">
                     <div className="relative group">
                         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                            <img src={search_icon} alt="Search"
+                            <img src={search_icon} alt="Meklēt"
                                 className="w-6 h-6 transition-all duration-300" />
                         </div>
                         <input className="w-full h-16 pl-12 pr-4 bg-white border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none text-lg transition-all"
@@ -35,7 +35,7 @@ function Support() {
                 <Link to={'/settings'}>
                 <div className="flex flex-col gap-4 rounded-xl border border-gray-200 bg-gray-100 p-6 hover:border-primary/50 transition-all group cursor-pointer">
                     <div className="size-12 rounded-lg bg-gray-200 flex items-center justify-center text-primary group-hover:bg-primary transition-all">
-                        <img src={user_settings_icon} className="w-8 h-8 transition-all group-hover:brightness-0 group-hover:invert" />
+                        <img src={user_settings_icon} alt="Lietotāja iestatījumi" className="w-8 h-8 transition-all group-hover:brightness-0 group-hover:invert" />
                     </div>
                     <h3 className="text-2xl font-bold">Konta pārvaldība</h3>
                     <p className="text-gray-500 text-sm">Pārvaldi profilu, abonomentu, un vispārīgos iestatījumus.</p>
@@ -44,7 +44,7 @@ function Support() {
                 <Link to={'/dashboard'}>
                 <div className="flex flex-col gap-4 rounded-xl border border-gray-200 bg-gray-100 p-6 hover:border-primary/50 transition-all group cursor-pointer">
                     <div className="size-12 rounded-lg bg-gray-200 flex items-center justify-center text-primary group-hover:bg-primary transition-all">
-                        <img src={bar_chart_icon} className="w-8 h-8 transition-all group-hover:brightness-0 group-hover:invert" />
+                        <img src={bar_chart_icon} alt="Rezultāti" className="w-8 h-8 transition-all group-hover:brightness-0 group-hover:invert" />
                     </div>
                     <h3 className="text-2xl font-bold">Aptaujas & Rezultāti</h3>
                     <p className="text-gray-500 text-sm">Veido pilnveidotas aptaujas un eksportē to reāllaika datus.</p>
@@ -53,7 +53,7 @@ function Support() {
                 <Link to={'/docs'}>
                 <div className="flex flex-col gap-4 rounded-xl border border-gray-200 bg-gray-100 p-6 hover:border-primary/50 transition-all group cursor-pointer">
                     <div className="size-12 rounded-lg bg-gray-200 flex items-center justify-center text-primary group-hover:bg-primary transition-all ">
-                        <img src={admin_icon} className="w-10 h-10 transition-all group-hover:brightness-0 group-hover:invert" />
+                        <img src={admin_icon} alt="Datu drošība un informācija" className="w-10 h-10 transition-all group-hover:brightness-0 group-hover:invert" />
                     </div>
                     <h3 className="text-2xl font-bold">Privātums & Drošība</h3>
                     <p className="text-gray-500 text-sm">Viss par datu šifrēšanu un datu aizsardzību mūsu sistēmā.</p>
@@ -67,7 +67,7 @@ function Support() {
                     <p className="text-gray-600 text-lg mb-8 leading-relaxed">Vai tev ir specifisks jautājums?</p>
                     <div className="space-y-4">
                         <div className="flex items-center gap-2 text-gray-700">
-                                <img src={mail_icon} className="w-6 h-6 transition-all group-hover:brightness-0 group-hover:invert" />
+                                <img src={mail_icon} alt="Poller epasta adrese" className="w-6 h-6 transition-all group-hover:brightness-0 group-hover:invert" />
                                 <span>support@poller.lv</span>
                         </div>
                     </div>
