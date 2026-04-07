@@ -12,6 +12,8 @@ import WithBackgroundBtn from "../components/WithBackgroundBtn.jsx"
 function Login() {
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
+    const [errors, setErrors] = useState({})
+
     const [formData, setFormData] = useState({
         email: "",
         password: ""
@@ -22,20 +24,35 @@ function Login() {
             ...formData,
             [e.target.id]: e.target.value
         })
+
+        if (errors[e.target.id]) {
+            setErrors({
+                ...errors,
+                [e.target.id]: null
+            })
+        }
     }
 
     const handleEmailLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
+        setErrors({})
 
         try {
             const response = await axios.post('http://127.0.0.1:8000/api/login', formData);
-
             localStorage.setItem('token', response.data.token);
             navigate('/home');
         } catch (error) {
-            console.error("Login Error:", error.response?.data);
-            alert(error.response?.data?.message || "Nepareizs e-pasts vai parole.")
+            if (error.response && error.response.status === 422) {
+                setErrors(error.response.data.errors)
+            } else if (error.response && error.response.status === 401) {
+                setErrors({
+                    email: ['Nepareizs lietotājvārds vai parole'],
+                    password: ['Nepareizs lietotājvārds vai parole']
+                });
+            } else {
+                console.error("Login failed: ", error)
+            }
         } finally {
             setLoading(false)
         }
@@ -74,9 +91,10 @@ function Login() {
                                 text="E-pasta adrese"
                                 placeholder="janis@epasts.com"
                                 id="email"
-                                type="email"
+                                type="text"
                                 value={formData.email}
                                 onChange={handleChange}
+                                error={errors.email?.[0]}
                             />
 
                             <LargeInput
@@ -87,6 +105,7 @@ function Login() {
                                 type="password"
                                 value={formData.password}
                                 onChange={handleChange}
+                                error={errors.password?.[0]}
                             />
 
                             <WithBackgroundBtn

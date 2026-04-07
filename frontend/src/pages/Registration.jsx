@@ -12,6 +12,8 @@ import LargeInput from "../components/LargeInput.jsx"
 function Registration() {
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
+    const [errors, setErrors] = useState({})
+
     const [formData, setFormData] = useState({
         username: "",
         email: "",
@@ -23,11 +25,19 @@ function Registration() {
             ...formData,
             [e.target.id]: e.target.value
         })
+
+        if (errors[e.target.id]) {
+            setErrors({
+                ...errors,
+                [e.target.id]: null
+            })
+        }
     }
 
     const handleEmailRegister = async (e) => {
         e.preventDefault()
         setLoading(true)
+        setErrors({})
 
         try {
             const response = await axios.post('http://127.0.0.1:8000/api/register', formData)
@@ -37,8 +47,11 @@ function Registration() {
                 navigate('/home')
             }
         } catch (error) {
-            console.error("Registration failed:", error.response?.data)
-            alert("Kļūda reģistrācijā. Mēģiniet vēlreiz.")
+            if (error.response && error.response.status === 422) {
+                setErrors(error.response.data.errors)
+            } else {
+                console.error("Registration failed:", error.response?.data)
+            }
         } finally {
             setLoading(false)
         }
@@ -57,11 +70,13 @@ function Registration() {
                 <div className="flex-1 flex flex-col justify-center items-center px-8 sm:px-16 lg:px-24 py-2">
                     <Logo />
 
-                    <div className="w-full mt-6">
+                    <div className="w-full mt-1">
                         <h2 className="text-2xl font-bold text-gray-900 mb-1 text-center">Izveido savu profilu</h2>
                         <p className="text-gray-500 text-sm mb-8 text-center">Sāc iepazīt savu mērķauditoriju jau tagad</p>
 
-                        <form className="space-y-5" onSubmit={handleEmailRegister}>
+                        <form className="space-y-4"
+                              onSubmit={handleEmailRegister}>
+
                             <LargeInput
                                 htmlFor="username"
                                 text="Lietotājvārds"
@@ -70,6 +85,7 @@ function Registration() {
                                 type="text"
                                 value={formData.username}
                                 onChange={handleChange}
+                                error={errors.username?.[0]}
                             />
 
                             <LargeInput
@@ -77,9 +93,10 @@ function Registration() {
                                 text="E-pasta adrese"
                                 placeholder="janis@epasts.com"
                                 id="email"
-                                type="email"
+                                type="text"
                                 value={formData.email}
                                 onChange={handleChange}
+                                error={errors.email?.[0]}
                             />
 
                             <LargeInput
@@ -90,6 +107,7 @@ function Registration() {
                                 type="password"
                                 value={formData.password}
                                 onChange={handleChange}
+                                error={errors.password?.[0]}
                             />
 
                             <WithBackgroundBtn
