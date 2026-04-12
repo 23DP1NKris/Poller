@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from "../context/AuthContext.jsx"
 import OutlineBtn from "../components/OutlineBtn.jsx"
 import Logo from "../components/Logo.jsx"
 import google_icon from "../assets/images/google_icon.png"
@@ -11,6 +12,7 @@ import LargeInput from "../components/LargeInput.jsx"
 
 function Registration() {
     const navigate = useNavigate()
+    const { setUser } = useAuth()
     const [loading, setLoading] = useState(false)
     const [errors, setErrors] = useState({})
 
@@ -44,6 +46,7 @@ function Registration() {
 
             if (response.data.token) {
                 localStorage.setItem('token', response.data.token)
+                setUser(response.data.user)
                 navigate('/home')
             }
         } catch (error) {

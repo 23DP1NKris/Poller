@@ -94,12 +94,12 @@ function Sidebar() {
 
                 <Link
                     to="/support"
-                    className="w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 ease-in-out hover:bg-gray-200"
+                    className="w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 ease-in-out text-accent-gray hover:bg-gray-200"
                 >
                     <img
                         src={support_icon}
                         alt="Atbalsts"
-                        className="w-6 h-6 object-contain transition-all duration-200"
+                        className="w-6 h-6 object-contain transition-all duration-200 opacity-75"
                     />
                     <span className="font-semibold tracking-wide text-sm">Atbalsts</span>
                 </Link>

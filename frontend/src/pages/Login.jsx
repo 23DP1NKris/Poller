@@ -8,9 +8,11 @@ import google_icon from "../assets/images/google_icon.png"
 import ms_icon from "../assets/images/microsoft_icon.png"
 import LargeInput from "../components/LargeInput.jsx"
 import WithBackgroundBtn from "../components/WithBackgroundBtn.jsx"
+import {useAuth} from "../context/AuthContext.jsx"
 
 function Login() {
     const navigate = useNavigate()
+    const { setUser } = useAuth()
     const [loading, setLoading] = useState(false)
     const [errors, setErrors] = useState({})
 
@@ -20,16 +22,9 @@ function Login() {
     })
 
     const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.id]: e.target.value
-        })
-
+        setFormData({ ...formData, [e.target.id]: e.target.value })
         if (errors[e.target.id]) {
-            setErrors({
-                ...errors,
-                [e.target.id]: null
-            })
+            setErrors({ ...errors, [e.target.id]: null })
         }
     }
 
@@ -41,6 +36,9 @@ function Login() {
         try {
             const response = await axios.post('http://127.0.0.1:8000/api/login', formData);
             localStorage.setItem('token', response.data.token);
+
+            setUser(response.data.user);
+
             navigate('/home');
         } catch (error) {
             if (error.response && error.response.status === 422) {
@@ -50,8 +48,6 @@ function Login() {
                     email: ['Nepareizs lietotājvārds vai parole'],
                     password: ['Nepareizs lietotājvārds vai parole']
                 });
-            } else {
-                console.error("Login failed: ", error)
             }
         } finally {
             setLoading(false)
