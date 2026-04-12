@@ -1,4 +1,4 @@
-import Header from "../layouts/Header.jsx"
+import GuestHeader from "../layouts/GuestHeader.jsx"
 import search_icon from "../assets/images/search_icon.png"
 import user_settings_icon from "../assets/images/user_settings_icon.png"
 import bar_chart_icon from "../assets/images/bar_chart_icon.png"
@@ -12,7 +12,7 @@ import Footer from "../layouts/Footer.jsx"
 function Support() {
     return (
         <>
-        <Header />
+        <GuestHeader />
 
         <div className="flex-1 mx-auto w-full px-6 py-12">
             <section className="text-center mb-16">

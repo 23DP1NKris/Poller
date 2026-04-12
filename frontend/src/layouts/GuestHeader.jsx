@@ -4,7 +4,7 @@ import close_menu_icon from "../assets/images/close_icon.png"
 import dropdown_arrow from "../assets/images/dropdown_arrow_down.png"
 import Logo from "../components/Logo.jsx"
 
-function Header() {
+function GuestHeader() {
     const [isOpen, setIsOpen] = useState(false)
 
     return (
@@ -86,4 +86,4 @@ function Header() {
     )
 }
 
-export default Header
+export default GuestHeader

@@ -1,10 +1,10 @@
-import Header from "../layouts/Header.jsx"
+import GuestHeader from "../layouts/GuestHeader.jsx"
 import Hero from "../layouts/Hero.jsx"
 
 function LandingPage() {
     return (
         <>
-            <Header />
+            <GuestHeader />
             <Hero />
         </>
     )
