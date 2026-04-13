@@ -8,6 +8,7 @@ import logout_icon from "../assets/images/logout.png"
 import Logo from "../components/Logo.jsx"
 import axios from 'axios'
 import {Link} from "react-router-dom";
+import UserPreview from "../components/UserPreview.jsx";
 
 function Sidebar() {
     const handleLogout = async () => {
@@ -105,7 +106,11 @@ function Sidebar() {
                 </Link>
             </nav>
 
-            <div className="p-4 border-t border-gray-200/60 mt-auto">
+            <div className="mb-4">
+                <UserPreview />
+            </div>
+
+            <div className="p-3 border-t border-gray-200 mt-auto">
                 <button
                     onClick={handleLogout}
                     className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-accent-gray hover:bg-gray-200 transition-all duration-200"
