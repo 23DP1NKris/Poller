@@ -2,7 +2,7 @@ function LargeInput(props) {
     return (
         <div>
             <label className="block text-sm font-semibold text-gray-900"
-                   htmlFor={props.htmlFor}>
+                   htmlFor={props.id}>
                 {props.text}
             </label>
 

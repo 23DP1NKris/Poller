@@ -81,7 +81,6 @@ function Registration() {
                               onSubmit={handleEmailRegister}>
 
                             <LargeInput
-                                htmlFor="username"
                                 text="Lietotājvārds"
                                 placeholder="Jānis Bērziņš"
                                 id="username"
@@ -92,7 +91,6 @@ function Registration() {
                             />
 
                             <LargeInput
-                                htmlFor="email"
                                 text="E-pasta adrese"
                                 placeholder="janis@epasts.com"
                                 id="email"
@@ -103,7 +101,6 @@ function Registration() {
                             />
 
                             <LargeInput
-                                htmlFor="password"
                                 text="Parole"
                                 placeholder="••••••••"
                                 id="password"

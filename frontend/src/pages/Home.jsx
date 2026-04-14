@@ -7,9 +7,9 @@ function Home() {
     const { user, loading } = useAuth()
 
     if (loading) return (
-        <div className="flex h-screen items-center justify-center font-semibold text-gray-500">
+        <p className="flex h-screen items-center justify-center font-semibold text-gray-500">
             Ielādējas...
-        </div>
+        </p>
     )
 
     if (!user) return <Navigate to="/login" />

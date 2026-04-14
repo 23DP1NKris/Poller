@@ -83,7 +83,6 @@ function Login() {
 
                         <form className="space-y-5" onSubmit={handleEmailLogin}>
                             <LargeInput
-                                htmlFor="email"
                                 text="E-pasta adrese"
                                 placeholder="janis@epasts.com"
                                 id="email"
@@ -94,7 +93,6 @@ function Login() {
                             />
 
                             <LargeInput
-                                htmlFor="password"
                                 text="Parole"
                                 placeholder="••••••••"
                                 id="password"
