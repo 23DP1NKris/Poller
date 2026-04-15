@@ -102,4 +102,25 @@ class AuthController extends Controller
             'message' => 'Profils atjaunots veiksmīgi!'
         ], 200);
     }
+
+    public function updatePassword(Request $request) {
+        $user = $request->user();
+
+        $data = $request->validate([
+            'current_password' => 'required|current_password',
+            'new_password' => 'required|string|min:8|confirmed',
+        ], [
+            'current_password.required' => 'Parole ir obligāta.',
+            'current_password.current_password' => 'Parole ir nepareiza.',
+            'new_password.required' => 'Jaunā parole ir obligāta.',
+            'new_password.min' => 'Jaunajai parolei jābūt vismaz 8 rakstzīmes garai.',
+            'new_password.confirmed' => 'Paroles apstiprinājums nesakrīt.',
+        ]);
+
+        $user->update([
+            'password' => Hash::make($data['new_password']),
+        ]);
+
+        return response(['message' => 'Parole veiksmīgi nomainīta!'], 200);
+    }
 }

@@ -67,6 +67,7 @@ function AccountSettings({ user }) {
                         <LargeInput
                             text="Lietotājvārds"
                             id="username"
+                            placeholder={user.username}
                             value={formData.username}
                             onChange={handleChange}
                             error={errors.username ? errors.username[0] : null}
@@ -78,6 +79,7 @@ function AccountSettings({ user }) {
                         <LargeTextarea
                             text="Bio"
                             id="bio"
+                            placeholder={user.bio}
                             value={formData.bio}
                             onChange={handleChange}
                             error={errors.bio ? errors.bio[0] : null}
