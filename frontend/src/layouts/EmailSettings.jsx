@@ -19,7 +19,7 @@ function EmailSettings() {
                         <span className="text-sm font-bold text-gray-700 block">Jaunu funkciju paziņojumi</span>
                         <p className="text-xs text-gray-500">Uzziniet par uzlabojumiem.</p>
                     </div>
-                    <input type="checkbox" className="w-5 h-5 accent-primary rounded cursor-pointer" defaultChecked />
+                    <input type="checkbox" className="w-5 h-5 accent-primary rounded cursor-pointer" />
                 </div>
 
                 <div className="flex items-center justify-between">

@@ -123,4 +123,13 @@ class AuthController extends Controller
 
         return response(['message' => 'Parole veiksmīgi nomainīta!'], 200);
     }
+
+    public function deleteAccount(Request $request) {
+        $user = $request->user();
+
+        $user->tokens()->delete();
+        $user->delete();
+
+        return response(['message' => 'Konts ir dzēsts.'], 200);
+    }
 }
