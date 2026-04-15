@@ -79,4 +79,27 @@ class AuthController extends Controller
             'message' => 'Izrakstīšanās ir veiksmīga'
         ], 200);
     }
+
+    public function updateProfile(Request $request) {
+        $user = $request->user();
+
+        $data = $request->validate([
+            'username' => 'required|string|max:50|unique:users,username,' . $user->id,
+            'bio' => 'nullable|string|max:250',
+        ], [
+            'username.required' => 'Lietotājvārds ir obligāts.',
+            'username.unique' => 'Šis lietotājvārds jau ir aizņemts.',
+            'bio.max' => 'Bio nedrīkst pārsniegt 250 rakstzīmes.',
+        ]);
+
+        $user->update([
+            'username' => $data['username'],
+            'bio' => $data['bio'],
+        ]);
+
+        return response([
+            'user' => $user,
+            'message' => 'Profils atjaunots veiksmīgi!'
+        ], 200);
+    }
 }
