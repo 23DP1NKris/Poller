@@ -5,7 +5,7 @@ import LargeInput from "../components/LargeInput.jsx"
 import BulletpointBox from "../components/BulletpointBox.jsx"
 import WithBackgroundBtn from "../components/WithBackgroundBtn.jsx"
 import admin_icon from "../assets/images/admin_icon.png"
-import info_icon from "../assets/images/info.png"
+import info_icon from "../assets/images/info_icon.png"
 
 function SecuritySettings() {
     const [securityData, setSecurityData] = useState({

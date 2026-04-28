@@ -81,15 +81,11 @@ function AccountSettings({ user }) {
                             id="bio"
                             placeholder={user.bio}
                             value={formData.bio}
+                            maxLength={250}
                             onChange={handleChange}
                             error={errors.bio ? errors.bio[0] : null}
+
                         />
-                        <div className="flex justify-between px-1">
-                            <p className="text-xs text-gray-400">Maksimums 250 rakstzīmes</p>
-                            <span className={`text-xs ${formData.bio.length > 250 ? 'text-red-500' : 'text-gray-400'}`}>
-                                {formData.bio.length}/250
-                            </span>
-                        </div>
                     </div>
                 </div>
 

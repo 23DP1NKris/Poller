@@ -1,5 +1,6 @@
 import WithBackgroundBtn from "../components/WithBackgroundBtn.jsx"
 import burger_menu_icon from "../assets/images/burger_menu_icon.png"
+import { Link } from "react-router-dom"
 
 function DashboardHeader({ title, isOpen, setIsOpen }) {
     return (
@@ -22,7 +23,9 @@ function DashboardHeader({ title, isOpen, setIsOpen }) {
 
             <div className="flex items-center gap-4">
                 <div className="hidden sm:block">
-                    <WithBackgroundBtn text="Izveidot jaunu aptauju" />
+                    <Link to="/create-poll">
+                        <WithBackgroundBtn text="Izveidot jaunu aptauju" />
+                    </Link>
                 </div>
             </div>
         </header>

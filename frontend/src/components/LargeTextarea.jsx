@@ -9,7 +9,7 @@ function LargeTextArea(props) {
             </label>
 
             <textarea
-                className={`w-full rounded-lg border px-4 py-3 text-sm outline-none transition-all placeholder:text-gray-400 min-h-30 resize-none
+                className={`w-full rounded-lg border px-4 py-3 text-sm outline-none transition-all placeholder:text-gray-400 min-h-[120px] resize-none
                 ${props.error
                     ? "border-red-500 bg-red-50 focus:ring-1 focus:ring-red-500"
                     : "border-gray-200 bg-white focus:border-primary focus:ring-1 focus:ring-primary"
@@ -19,6 +19,15 @@ function LargeTextArea(props) {
                 value={props.value}
                 onChange={props.onChange}
             />
+
+            {props.maxLength && (
+                <div className="flex justify-between px-1 mt-1">
+                    <p className="text-xs text-gray-400">Maksimums {props.maxLength} rakstzīmes</p>
+                    <span className={`text-xs ${props.value.length > props.maxLength ? 'text-red-500 font-bold' : 'text-gray-400'}`}>
+                        {props.value.length}/{props.maxLength}
+                    </span>
+                </div>
+            )}
 
             {props.error && (
                 <span className="text-red-500 text-xs ml-1 font-medium mt-1 block">

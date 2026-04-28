@@ -29,17 +29,17 @@ function Login() {
     }
 
     const handleEmailLogin = async (e) => {
-        e.preventDefault();
-        setLoading(true);
+        e.preventDefault()
+        setLoading(true)
         setErrors({})
 
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/login', formData);
-            localStorage.setItem('token', response.data.token);
+            const response = await axios.post('http://127.0.0.1:8000/api/login', formData)
+            localStorage.setItem('token', response.data.token)
 
-            setUser(response.data.user);
+            setUser(response.data.user)
 
-            navigate('/home');
+            navigate('/home')
         } catch (error) {
             if (error.response && error.response.status === 422) {
                 setErrors(error.response.data.errors)
@@ -47,7 +47,7 @@ function Login() {
                 setErrors({
                     email: ['Nepareizs lietotājvārds vai parole'],
                     password: ['Nepareizs lietotājvārds vai parole']
-                });
+                })
             }
         } finally {
             setLoading(false)
