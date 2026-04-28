@@ -10,13 +10,14 @@ class AuthController extends Controller
 {
     public function register(Request $request) {
         $data = $request->validate([
-            'username' => 'required|string|unique:users|max:50',
+            'username' => 'required|string|min:3|unique:users|max:50',
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string|min:8',
         ], [
             'username.required' => 'Lietotājvārds ir obligāts.',
+            'username.min' => 'Lietotājvārdam jābūt vismaz 3 rakstzīmēm.',
             'username.unique' => 'Šis lietotājvārds jau ir aizņemts.',
-            'username.max' => 'Lietotājvārds nedrīkst pārsniegt 50 zīmes.',
+            'username.max' => 'Lietotājvārds nedrīkst pārsniegt 50 rakstzīmes.',
 
             'email.required' => 'E-pasta adrese ir obligāta.',
             'email.email' => 'Lūdzu ievadiet derīgu e-pasta adresi.',

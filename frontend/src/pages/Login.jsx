@@ -23,8 +23,8 @@ function Login() {
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.id]: e.target.value })
-        if (errors[e.target.id]) {
-            setErrors({ ...errors, [e.target.id]: null })
+        if (errors[e.target.id] || errors.general) {
+            setErrors({ ...errors, [e.target.id]: null, general: null })
         }
     }
 
@@ -36,18 +36,15 @@ function Login() {
         try {
             const response = await axios.post('http://127.0.0.1:8000/api/login', formData)
             localStorage.setItem('token', response.data.token)
-
             setUser(response.data.user)
-
             navigate('/home')
         } catch (error) {
-            if (error.response && error.response.status === 422) {
+            if (error.response?.status === 422) {
                 setErrors(error.response.data.errors)
-            } else if (error.response && error.response.status === 401) {
-                setErrors({
-                    email: ['Nepareizs lietotājvārds vai parole'],
-                    password: ['Nepareizs lietotājvārds vai parole']
-                })
+            } else if (error.response?.status === 401) {
+                setErrors({ general: ['Nepareizs e-pasts vai parole.'] })
+            } else {
+                setErrors({ general: ['Pieslēgšanās neizdevās. Lūdzu mēģiniet vēlreiz.'] })
             }
         } finally {
             setLoading(false)
@@ -82,11 +79,17 @@ function Login() {
                         <p className="text-gray-500 text-sm mb-8 text-center">Ievadi savus lietotāja datus, lai pieslēgtos.</p>
 
                         <form className="space-y-5" onSubmit={handleEmailLogin}>
+                            {errors.general && (
+                                <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600 font-medium">
+                                    {errors.general[0]}
+                                </div>
+                            )}
+
                             <LargeInput
                                 text="E-pasta adrese"
                                 placeholder="janis@epasts.com"
                                 id="email"
-                                type="text"
+                                type="email"
                                 value={formData.email}
                                 onChange={handleChange}
                                 error={errors.email?.[0]}

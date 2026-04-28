@@ -28,10 +28,11 @@ function Registration() {
             [e.target.id]: e.target.value
         })
 
-        if (errors[e.target.id]) {
+        if (errors[e.target.id] || errors.general) {
             setErrors({
                 ...errors,
-                [e.target.id]: null
+                [e.target.id]: null,
+                general: null
             })
         }
     }
@@ -50,10 +51,10 @@ function Registration() {
                 navigate('/home')
             }
         } catch (error) {
-            if (error.response && error.response.status === 422) {
+            if (error.response?.status === 422) {
                 setErrors(error.response.data.errors)
             } else {
-                console.error("Registration failed:", error.response?.data)
+                setErrors({ general: ['Reģistrācija neizdevās. Lūdzu mēģiniet vēlreiz.'] })
             }
         } finally {
             setLoading(false)
@@ -79,6 +80,12 @@ function Registration() {
 
                         <form className="space-y-4"
                               onSubmit={handleEmailRegister}>
+
+                            {errors.general && (
+                                <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600 font-medium">
+                                    {errors.general[0]}
+                                </div>
+                            )}
 
                             <LargeInput
                                 text="Lietotājvārds"
