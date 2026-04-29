@@ -30,6 +30,7 @@ class PollController extends Controller
             'show_stats' => 'boolean',
             'allow_multiple_votes' => 'boolean',
             'is_public' => 'boolean',
+            'requires_auth' => 'boolean',
             'expires_at' => 'nullable|date|after:now',
             'categories' => 'nullable|array',
             'categories.*' => 'string|max:50',
@@ -67,6 +68,7 @@ class PollController extends Controller
                 'show_stats' => $data['show_stats'] ?? true,
                 'allow_multiple_votes' => $data['allow_multiple_votes'] ?? false,
                 'is_public' => $data['is_public'] ?? true,
+                'requires_auth' => $data['requires_auth'] ?? false,
                 'expires_at' => $data['expires_at'] ?? null,
                 'categories' => $data['categories'] ?? null,
             ]);
@@ -118,6 +120,7 @@ class PollController extends Controller
             'show_stats' => 'boolean',
             'allow_multiple_votes' => 'boolean',
             'is_public' => 'boolean',
+            'requires_auth' => 'boolean',
             'expires_at' => 'nullable|date',
             'categories' => 'nullable|array',
             'categories.*' => 'string|max:50',
@@ -153,6 +156,7 @@ class PollController extends Controller
                 'show_stats' => $data['show_stats'] ?? true,
                 'allow_multiple_votes' => $data['allow_multiple_votes'] ?? false,
                 'is_public' => $data['is_public'] ?? true,
+                'requires_auth' => $data['requires_auth'] ?? false,
                 'expires_at' => $data['expires_at'] ?? null,
                 'categories' => $data['categories'] ?? null,
             ]);

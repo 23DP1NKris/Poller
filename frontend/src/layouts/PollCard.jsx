@@ -67,6 +67,9 @@ function PollCard({ poll, copiedId, openMenuId, onShare, onDelete, onClose, onTo
                     {!poll.show_stats && (
                         <span className="text-xs bg-gray-100 text-gray-500 font-medium px-2 py-0.5 rounded-md">Slēpti rezultāti</span>
                     )}
+                    {poll.requires_auth && (
+                        <span className="text-xs bg-gray-100 text-gray-500 font-medium px-2 py-0.5 rounded-md">Tikai reģistrēti</span>
+                    )}
                 </div>
             </div>
 

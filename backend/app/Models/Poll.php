@@ -18,6 +18,7 @@ class Poll extends Model
         'show_stats',
         'allow_multiple_votes',
         'is_public',
+        'requires_auth',
         'expires_at',
         'categories',
     ];
@@ -27,6 +28,7 @@ class Poll extends Model
         'show_stats' => 'boolean',
         'allow_multiple_votes' => 'boolean',
         'is_public' => 'boolean',
+        'requires_auth' => 'boolean',
         'expires_at' => 'datetime',
         'categories' => 'array',
     ];

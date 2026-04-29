@@ -85,6 +85,19 @@ function PollSettings({ pollData, setPollData, isSubmitting, onSubmit, errors = 
                         <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${pollData.isPublic ? 'left-5' : 'left-1'}`} />
                     </button>
                 </div>
+
+                <div className="py-4 flex justify-between items-start gap-4">
+                    <div>
+                        <p className="text-sm font-bold text-gray-800">Tikai autorizētiem lietotājiem</p>
+                        <p className="text-xs text-gray-400 leading-tight">Balsot var tikai reģistrēti lietotāji</p>
+                    </div>
+                    <button
+                        onClick={() => setPollData({ ...pollData, requiresAuth: !pollData.requiresAuth })}
+                        className={`w-10 h-6 rounded-full shrink-0 transition-colors relative ${pollData.requiresAuth ? 'bg-primary' : 'bg-gray-200'}`}
+                    >
+                        <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${pollData.requiresAuth ? 'left-5' : 'left-1'}`} />
+                    </button>
+                </div>
             </div>
 
             <div className="mt-6 pt-6 border-t border-gray-50 space-y-6">

@@ -28,6 +28,7 @@ function CreatePoll() {
         showStats: true,
         allowMultipleVotes: false,
         isPublic: true,
+        requiresAuth: false,
         hasDeadline: false,
         deadline: '',
         categories: ['Bizness']
@@ -173,6 +174,7 @@ function CreatePoll() {
             show_stats: pollData.showStats,
             allow_multiple_votes: pollData.allowMultipleVotes,
             is_public: pollData.isPublic,
+            requires_auth: pollData.requiresAuth,
             expires_at: pollData.hasDeadline && pollData.deadline ? pollData.deadline : null,
             categories: pollData.categories.length > 0 ? pollData.categories : null,
             questions: questions.map(q => ({
