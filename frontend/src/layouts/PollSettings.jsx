@@ -34,13 +34,14 @@ function PollSettings({ pollData, setPollData, isSubmitting, onSubmit, errors = 
             </div>
 
             <div className="space-y-1">
-                <div className="py-4 flex justify-between items-start gap-4">
+                <div className={`py-4 flex justify-between items-start gap-4 ${pollData.requiresAuth ? 'opacity-40' : ''}`}>
                     <div>
                         <p className="text-sm font-bold text-gray-800">Anonīma balsošana</p>
                         <p className="text-xs text-gray-400 leading-tight">Neuzkrāt respondentu personīgo informāciju</p>
                     </div>
                     <button
-                        onClick={() => setPollData({ ...pollData, isAnonymous: !pollData.isAnonymous })}
+                        disabled={pollData.requiresAuth}
+                        onClick={() => setPollData({ ...pollData, isAnonymous: !pollData.isAnonymous, requiresAuth: false })}
                         className={`w-10 h-6 rounded-full shrink-0 transition-colors relative ${pollData.isAnonymous ? 'bg-primary' : 'bg-gray-200'}`}
                     >
                         <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${pollData.isAnonymous ? 'left-5' : 'left-1'}`} />
@@ -86,13 +87,14 @@ function PollSettings({ pollData, setPollData, isSubmitting, onSubmit, errors = 
                     </button>
                 </div>
 
-                <div className="py-4 flex justify-between items-start gap-4">
+                <div className={`py-4 flex justify-between items-start gap-4 ${pollData.isAnonymous ? 'opacity-40' : ''}`}>
                     <div>
                         <p className="text-sm font-bold text-gray-800">Tikai autorizētiem lietotājiem</p>
                         <p className="text-xs text-gray-400 leading-tight">Balsot var tikai reģistrēti lietotāji</p>
                     </div>
                     <button
-                        onClick={() => setPollData({ ...pollData, requiresAuth: !pollData.requiresAuth })}
+                        disabled={pollData.isAnonymous}
+                        onClick={() => setPollData({ ...pollData, requiresAuth: !pollData.requiresAuth, isAnonymous: false })}
                         className={`w-10 h-6 rounded-full shrink-0 transition-colors relative ${pollData.requiresAuth ? 'bg-primary' : 'bg-gray-200'}`}
                     >
                         <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${pollData.requiresAuth ? 'left-5' : 'left-1'}`} />
