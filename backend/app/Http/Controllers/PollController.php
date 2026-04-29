@@ -115,7 +115,7 @@ class PollController extends Controller
         $data = $request->validate([
             'title' => 'required|string|max:100',
             'description' => 'nullable|string|max:250',
-            'status' => 'required|in:draft,active,closed',
+            'status' => 'required|in:draft,active,closed,paused',
             'is_anonymous' => 'boolean',
             'show_stats' => 'boolean',
             'allow_multiple_votes' => 'boolean',
@@ -195,6 +195,28 @@ class PollController extends Controller
         $poll->update(['status' => 'closed']);
 
         return response(['poll' => $poll, 'message' => 'Aptauja slēgta veiksmīgi.']);
+    }
+
+    public function pause(Request $request, Poll $poll)
+    {
+        if ($poll->user_id !== $request->user()->id) {
+            return response(['message' => 'Piekļuve liegta.'], 403);
+        }
+
+        $poll->update(['status' => 'paused']);
+
+        return response(['poll' => $poll, 'message' => 'Aptauja apturēta.']);
+    }
+
+    public function open(Request $request, Poll $poll)
+    {
+        if ($poll->user_id !== $request->user()->id) {
+            return response(['message' => 'Piekļuve liegta.'], 403);
+        }
+
+        $poll->update(['status' => 'active']);
+
+        return response(['poll' => $poll, 'message' => 'Aptauja atvērta.']);
     }
 
     public function destroy(Request $request, Poll $poll)

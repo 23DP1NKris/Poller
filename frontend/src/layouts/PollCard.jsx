@@ -2,10 +2,11 @@ import { useNavigate } from "react-router-dom"
 import bar_chart_icon from "../assets/images/bar_chart_icon.png"
 import share_icon from "../assets/images/share_icon.png"
 import green_checkmark from "../assets/images/green_checkmark.png"
-import pause_icon from "../assets/images/pause_icon.png"
+import play_button_icon from "../assets/images/play_button_icon.png"
 import dots from "../assets/images/dots.png"
 import trash_icon from "../assets/images/trash_icon.png"
 import close_icon from "../assets/images/close_icon.png"
+import pencil_icon from "../assets/images/pencil_icon.png"
 
 const getTimeRemaining = (expiresAt) => {
     if (!expiresAt) return 'Bez termiņa'
@@ -16,7 +17,7 @@ const getTimeRemaining = (expiresAt) => {
     return `Beidzas pēc ${days} dienām`
 }
 
-function PollCard({ poll, copiedId, openMenuId, onShare, onDelete, onClose, onToggleMenu }) {
+function PollCard({ poll, copiedId, openMenuId, onShare, onDelete, onClose, onEdit, onToggleMenu }) {
     const navigate = useNavigate()
 
     return (
@@ -24,11 +25,12 @@ function PollCard({ poll, copiedId, openMenuId, onShare, onDelete, onClose, onTo
 
             <div className="flex-1 min-w-0">
                 <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                    <span className={`flex items-center gap-1.5 text-xs font-semibold ${poll.status === 'active' ? 'text-green-600' : poll.status === 'draft' ? 'text-amber-500' : 'text-red-700'}`}>
+                    <span className={`flex items-center gap-1.5 text-xs font-semibold ${poll.status === 'active' ? 'text-green-600' : poll.status === 'draft' ? 'text-amber-500' : poll.status === 'paused' ? 'text-blue-500' : 'text-red-700'}`}>
                         {poll.status === 'active' && <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />}
                         {poll.status === 'draft' && <span className="w-2 h-2 rounded-full bg-amber-400" />}
+                        {poll.status === 'paused' && <span className="w-2 h-2 rounded-full bg-blue-400" />}
                         {poll.status === 'closed' && <span className="w-2 h-2 rounded-full bg-red-500" />}
-                        {poll.status === 'active' ? 'Aktīva' : poll.status === 'draft' ? 'Melnraksts' : 'Slēgta'}
+                        {poll.status === 'active' ? 'Aktīva' : poll.status === 'draft' ? 'Melnraksts' : poll.status === 'paused' ? 'Apturēta' : 'Slēgta'}
                     </span>
                     {poll.categories?.map(cat => (
                         <span key={cat} className="px-2 py-0.5 bg-primary/10 text-primary text-xs font-bold rounded-md">
@@ -110,19 +112,29 @@ function PollCard({ poll, copiedId, openMenuId, onShare, onDelete, onClose, onTo
                     </button>
                     {openMenuId === poll.id && (
                         <div className="absolute right-0 top-full mt-1 w-44 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
-                            <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 font-medium hover:bg-gray-50 transition-colors">
-                                <img src={pause_icon} className="w-4 h-4 opacity-40" alt="" />
-                                Apturēt
+                            <button
+                                onClick={() => onEdit(poll.id)}
+                                className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+                            >
+                                <img src={pencil_icon} className="w-4 h-4 opacity-40" alt="" />
+                                Rediģēt
                             </button>
-                            {poll.status !== 'closed' && (
-                                <button
-                                    onClick={() => onClose(poll.id)}
-                                    className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 font-medium hover:bg-gray-50 transition-colors"
-                                >
-                                    <img src={close_icon} className="w-4 h-4 opacity-40" alt="" />
-                                    Slēgt aptauju
-                                </button>
-                            )}
+                            <button
+                                onClick={() => onClose(poll.id)}
+                                className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+                            >
+                                {poll.status === 'closed' ? (
+                                    <>
+                                        <img src={play_button_icon} className="w-4 h-4 opacity-40" alt="" />
+                                        Atvērt aptauju
+                                    </>
+                                ) : (
+                                    <>
+                                        <img src={close_icon} className="w-4 h-4 opacity-40" alt="" />
+                                        Slēgt aptauju
+                                    </>
+                                )}
+                            </button>
                             <button
                                 onClick={() => onDelete(poll.id)}
                                 className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-500 font-medium hover:bg-red-50 transition-colors"

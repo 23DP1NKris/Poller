@@ -1,6 +1,6 @@
 import { useAuth } from "../context/AuthContext.jsx"
 import { useState, useEffect, useMemo } from "react"
-import { Link, Navigate } from "react-router-dom"
+import { Link, Navigate, useNavigate } from "react-router-dom"
 import axios from "axios"
 import Sidebar from "../layouts/Sidebar.jsx"
 import DashboardHeader from "../layouts/DashboardHeader.jsx"
@@ -12,6 +12,7 @@ import search_icon from "../assets/images/search_icon.png"
 
 function Polls() {
     const { user, loading } = useAuth()
+    const navigate = useNavigate()
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
     const [polls, setPolls] = useState([])
@@ -66,13 +67,15 @@ function Polls() {
 
     const handleClose = async (pollId) => {
         const token = localStorage.getItem('token')
+        const poll = polls.find(p => p.id === pollId)
+        const endpoint = poll?.status === 'closed' ? 'open' : 'close'
         try {
-            await axios.patch(`http://127.0.0.1:8000/api/polls/${pollId}/close`, {}, {
+            await axios.patch(`http://127.0.0.1:8000/api/polls/${pollId}/${endpoint}`, {}, {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
-            setPolls(prev => prev.map(p => p.id === pollId ? { ...p, status: 'closed' } : p))
+            setPolls(prev => prev.map(p => p.id === pollId ? { ...p, status: endpoint === 'close' ? 'closed' : 'active' } : p))
         } catch (err) {
-            console.error('Failed to close poll:', err)
+            console.error('Failed to toggle poll status:', err)
         }
         setOpenMenuId(null)
     }
@@ -81,6 +84,10 @@ function Polls() {
         navigator.clipboard.writeText(`${window.location.origin}/poll/${pollId}`)
         setCopiedId(pollId)
         setTimeout(() => setCopiedId(null), 2000)
+    }
+
+    const handleEdit = (pollId) => {
+        navigate(`/polls/${pollId}/edit`)
     }
 
     const handleToggleMenu = (pollId) => {
@@ -187,6 +194,7 @@ function Polls() {
                                     onShare={handleShare}
                                     onDelete={handleDelete}
                                     onClose={handleClose}
+                                    onEdit={handleEdit}
                                     onToggleMenu={handleToggleMenu}
                                 />
                             ))}

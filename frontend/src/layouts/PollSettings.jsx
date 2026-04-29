@@ -2,7 +2,7 @@ import { useState } from "react"
 import WithBackgroundBtn from "../components/WithBackgroundBtn.jsx"
 import settings_icon from "../assets/images/settings_icon.png"
 
-function PollSettings({ pollData, setPollData, isSubmitting, onSubmit, errors = {} }) {
+function PollSettings({ pollData, setPollData, isSubmitting, onSubmit, submitText = 'Publicēt aptauju', errors = {} }) {
     const [isAddingCategory, setIsAddingCategory] = useState(false)
     const [newCategoryText, setNewCategoryText] = useState('')
 
@@ -190,7 +190,7 @@ function PollSettings({ pollData, setPollData, isSubmitting, onSubmit, errors = 
 
             <div className="mt-8">
                 <WithBackgroundBtn
-                    text={isSubmitting ? 'Saglabā...' : 'Publicēt aptauju'}
+                    text={isSubmitting ? 'Saglabā...' : submitText}
                     onClick={() => onSubmit('active')}
                 />
             </div>
