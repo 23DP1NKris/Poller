@@ -22,6 +22,7 @@ function AnswerPoll() {
     const [submitting, setSubmitting] = useState(false)
     const [submitError, setSubmitError] = useState(null)
     const [triedNext, setTriedNext] = useState(false)
+    const [ownerVoted, setOwnerVoted] = useState(false)
 
     useEffect(() => {
         const token = localStorage.getItem('token')
@@ -101,7 +102,7 @@ function AnswerPoll() {
         setSubmitting(true)
         setSubmitError(null)
         try {
-            await axios.post(`http://127.0.0.1:8000/api/public/polls/${id}/respond`, {
+            const res = await axios.post(`http://127.0.0.1:8000/api/public/polls/${id}/respond`, {
                 answers: formattedAnswers,
             }, {
                 headers: {
@@ -109,7 +110,11 @@ function AnswerPoll() {
                     'X-Session-Token': sessionToken,
                 },
             })
-            setSubmitted(true)
+            if (res.data.owner_voted) {
+                setOwnerVoted(true)
+            } else {
+                setSubmitted(true)
+            }
         } catch (err) {
             if (err.response?.status === 422 && err.response?.data?.message === 'Jūs jau esat atbildējuši uz šo aptauju.') {
                 setAlreadySubmitted(true)
@@ -168,6 +173,18 @@ function AnswerPoll() {
             <h2 className="font-bold text-gray-900 text-xl mb-2">Jūs jau esat balsojuši</h2>
             <p className="text-sm text-gray-400 leading-relaxed">
                 Šo aptauju var aizpildīt tikai vienreiz.
+            </p>
+        </div>
+    )
+
+    if (ownerVoted) return wrapper(
+        <div className="text-center max-w-sm">
+            <div className="w-16 h-16 rounded-2xl bg-primary/15 flex items-center justify-center mx-auto mb-5">
+                <img src={checkmark_icon} className="w-8 h-8" alt="" />
+            </div>
+            <h2 className="font-bold text-gray-900 text-xl mb-2">Paldies par interesi!</h2>
+            <p className="text-sm text-gray-400 leading-relaxed">
+                Aptaujas veidotāja balss netiek ieskaitīta rezultātos.
             </p>
         </div>
     )

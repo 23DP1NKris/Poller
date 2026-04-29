@@ -59,6 +59,10 @@ class PublicPollController extends Controller
             return response(['message' => 'Lai atbildētu uz šo aptauju, jāreģistrējas sistēmā.'], 401);
         }
 
+        if ($user && $user->id === $poll->user_id) {
+            return response(['owner_voted' => true], 200);
+        }
+
         $poll->load('questions.options');
 
         $questionIds = $poll->questions->pluck('id')->toArray();
