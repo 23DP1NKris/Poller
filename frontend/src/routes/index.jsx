@@ -9,6 +9,7 @@ import Results from "../pages/Results.jsx"
 import Polls from "../pages/Polls.jsx"
 import CreatePoll from "../pages/CreatePoll.jsx"
 import EditPoll from "../pages/EditPoll.jsx"
+import AnswerPoll from "../pages/AnswerPoll.jsx"
 
 export const router = createBrowserRouter([
     { path: '/', element: <App /> },
@@ -21,5 +22,6 @@ export const router = createBrowserRouter([
     { path: '/support', element: <Support /> },
     { path: '/settings', element: <Settings /> },
     { path: '/create-poll', element: <CreatePoll />},
-    { path: '/polls/:id/edit', element: <EditPoll />}
+    { path: '/polls/:id/edit', element: <EditPoll />},
+    { path: '/poll/:id', element: <AnswerPoll /> },
 ])

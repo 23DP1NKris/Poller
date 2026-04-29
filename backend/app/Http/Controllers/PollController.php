@@ -13,7 +13,11 @@ class PollController extends Controller
     public function index(Request $request)
     {
         $polls = Poll::where('user_id', $request->user()->id)
-            ->with(['questions.options'])
+            ->with(['questions' => function ($query) {
+                $query->orderBy('order')->with(['options' => function ($q) {
+                    $q->orderBy('order')->withCount('responses as votes_count');
+                }]);
+            }])
             ->orderByDesc('created_at')
             ->get();
 
@@ -103,7 +107,11 @@ class PollController extends Controller
             return response(['message' => 'Piekļuve liegta.'], 403);
         }
 
-        return response(['poll' => $poll->load('questions.options')]);
+        return response(['poll' => $poll->load(['questions' => function ($query) {
+            $query->orderBy('order')->with(['options' => function ($q) {
+                $q->orderBy('order')->withCount('responses as votes_count');
+            }]);
+        }])]);
     }
 
     public function update(Request $request, Poll $poll)
