@@ -2,13 +2,20 @@ import { useState } from "react"
 import WithBackgroundBtn from "../components/WithBackgroundBtn.jsx"
 import settings_icon from "../assets/images/settings_icon.png"
 
-function PollSettings({ pollData, setPollData, isSubmitting, onSubmit }) {
+function PollSettings({ pollData, setPollData, isSubmitting, onSubmit, errors = {} }) {
     const [isAddingCategory, setIsAddingCategory] = useState(false)
     const [newCategoryText, setNewCategoryText] = useState('')
 
+    const today = new Date()
+    const todayStr = [
+        today.getFullYear(),
+        String(today.getMonth() + 1).padStart(2, '0'),
+        String(today.getDate()).padStart(2, '0')
+    ].join('-')
+
     const addCategory = (catName) => {
         const trimmed = catName.trim()
-        if (trimmed && !pollData.categories.includes(trimmed)) {
+        if (trimmed && !pollData.categories.includes(trimmed) && pollData.categories.length < 8) {
             setPollData({ ...pollData, categories: [...pollData.categories, trimmed] })
         }
         setNewCategoryText('')
@@ -95,12 +102,19 @@ function PollSettings({ pollData, setPollData, isSubmitting, onSubmit }) {
                         </div>
                     </div>
                     {pollData.hasDeadline && (
-                        <input
-                            type="date"
-                            value={pollData.deadline}
-                            onChange={(e) => setPollData({ ...pollData, deadline: e.target.value })}
-                            className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl text-sm outline-none focus:border-primary/50 focus:bg-white transition-all"
-                        />
+                        <>
+                            <input
+                                type="date"
+                                lang="en-GB"
+                                min={todayStr}
+                                value={pollData.deadline}
+                                onChange={(e) => setPollData({ ...pollData, deadline: e.target.value })}
+                                className={`w-full p-3 bg-gray-50 border rounded-xl text-sm outline-none focus:bg-white transition-all ${errors.deadline ? 'border-red-300 focus:border-red-400' : 'border-gray-100 focus:border-primary/50'}`}
+                            />
+                            {errors.deadline && (
+                                <p className="text-xs text-red-500 font-medium mt-1.5">{errors.deadline}</p>
+                            )}
+                        </>
                     )}
                 </div>
 
@@ -114,26 +128,28 @@ function PollSettings({ pollData, setPollData, isSubmitting, onSubmit }) {
                             </span>
                         ))}
 
-                        {isAddingCategory ? (
-                            <div className="flex items-center gap-2">
-                                <input
-                                    type="text"
-                                    value={newCategoryText}
-                                    onChange={(e) => setNewCategoryText(e.target.value)}
-                                    onKeyDown={(e) => e.key === 'Enter' && addCategory(newCategoryText)}
-                                    className="px-3 py-1 text-xs border border-primary/40 rounded-lg outline-none w-28 bg-gray-50"
-                                    placeholder="Nosaukums..."
-                                    autoFocus
-                                />
-                                <button onClick={() => addCategory(newCategoryText)} className="text-primary text-xs font-bold hover:underline">Pievienot</button>
-                            </div>
-                        ) : (
-                            <button
-                                onClick={() => setIsAddingCategory(true)}
-                                className="px-3 py-1 border border-dashed border-gray-300 text-gray-400 text-xs font-bold rounded-lg hover:border-primary hover:text-primary transition-colors"
-                            >
-                                + Pievienot jaunu
-                            </button>
+                        {pollData.categories.length < 8 && (
+                            isAddingCategory ? (
+                                <div className="flex items-center gap-2">
+                                    <input
+                                        type="text"
+                                        value={newCategoryText}
+                                        onChange={(e) => setNewCategoryText(e.target.value)}
+                                        onKeyDown={(e) => e.key === 'Enter' && addCategory(newCategoryText)}
+                                        className="px-3 py-1 text-xs border border-primary/40 rounded-lg outline-none w-28 bg-gray-50"
+                                        placeholder="Nosaukums..."
+                                        autoFocus
+                                    />
+                                    <button onClick={() => addCategory(newCategoryText)} className="text-primary text-xs font-bold hover:underline">Pievienot</button>
+                                </div>
+                            ) : (
+                                <button
+                                    onClick={() => setIsAddingCategory(true)}
+                                    className="px-3 py-1 border border-dashed border-gray-300 text-gray-400 text-xs font-bold rounded-lg hover:border-primary hover:text-primary transition-colors"
+                                >
+                                    + Pievienot jaunu
+                                </button>
+                            )
                         )}
                     </div>
 

@@ -64,6 +64,7 @@ class AuthController extends Controller
             ], 401);
         }
 
+        $user->tokens()->delete();
         $token = $user->createToken('poller-token')->plainTextToken;
 
         return response([

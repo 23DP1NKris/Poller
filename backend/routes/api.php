@@ -18,5 +18,6 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
+    Route::patch('polls/{poll}/close', [PollController::class, 'close']);
     Route::apiResource('polls', PollController::class);
 });

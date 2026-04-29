@@ -23,7 +23,7 @@ class PollController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:100',
             'description' => 'nullable|string|max:250',
             'status' => 'required|in:draft,active',
             'is_anonymous' => 'boolean',
@@ -34,27 +34,27 @@ class PollController extends Controller
             'categories' => 'nullable|array',
             'categories.*' => 'string|max:50',
             'questions' => 'required|array|min:1',
-            'questions.*.text' => 'required|string|max:500',
+            'questions.*.text' => 'required|string|max:255',
             'questions.*.is_multiple_choice' => 'boolean',
             'questions.*.is_required' => 'boolean',
             'questions.*.options' => 'required|array|min:2',
             'questions.*.options.*' => 'required|string|max:255',
         ], [
             'title.required' => 'Aptaujas nosaukums ir obligāts.',
-            'title.max' => 'Aptaujas nosaukums nedrīkst pārsniegt 255 rakstzīmes.',
+            'title.max' => 'Aptaujas nosaukums nedrīkst pārsniegt 100 rakstzīmes.',
             'description.max' => 'Apraksts nedrīkst pārsniegt 250 rakstzīmes.',
             'status.required' => 'Aptaujas statuss ir obligāts.',
             'status.in' => 'Nederīgs aptaujas statuss.',
             'expires_at.date' => 'Lūdzu ievadiet derīgu datumu.',
-            'expires_at.after' => 'Termiņam jābūt nākotnē.',
+            'expires_at.after' => 'Aptaujas beigām ir jābūt nākotnē.',
             'questions.required' => 'Aptaujai jābūt vismaz vienam jautājumam.',
             'questions.min' => 'Aptaujai jābūt vismaz vienam jautājumam.',
             'questions.*.text.required' => 'Katram jautājumam jābūt tekstam.',
-            'questions.*.text.max' => 'Jautājuma teksts nedrīkst pārsniegt 500 rakstzīmes.',
+            'questions.*.text.max' => 'Jautājuma teksts nedrīkst pārsniegt 250 rakstzīmes.',
             'questions.*.options.required' => 'Katram jautājumam jābūt vismaz diviem variantiem.',
             'questions.*.options.min' => 'Katram jautājumam jābūt vismaz diviem variantiem.',
             'questions.*.options.*.required' => 'Atbildes varianta teksts nedrīkst būt tukšs.',
-            'questions.*.options.*.max' => 'Atbildes variants nedrīkst pārsniegt 255 rakstzīmes.',
+            'questions.*.options.*.max' => 'Atbildes variants nedrīkst pārsniegt 250 rakstzīmes.',
         ]);
 
         $poll = DB::transaction(function () use ($data, $request) {
@@ -97,7 +97,7 @@ class PollController extends Controller
 
     public function show(Request $request, Poll $poll)
     {
-        if (!$poll->is_public && $poll->user_id !== $request->user()->id) {
+        if ($poll->user_id !== $request->user()->id) {
             return response(['message' => 'Piekļuve liegta.'], 403);
         }
 
@@ -111,7 +111,7 @@ class PollController extends Controller
         }
 
         $data = $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:100',
             'description' => 'nullable|string|max:250',
             'status' => 'required|in:draft,active,closed',
             'is_anonymous' => 'boolean',
@@ -122,14 +122,14 @@ class PollController extends Controller
             'categories' => 'nullable|array',
             'categories.*' => 'string|max:50',
             'questions' => 'required|array|min:1',
-            'questions.*.text' => 'required|string|max:500',
+            'questions.*.text' => 'required|string|max:250',
             'questions.*.is_multiple_choice' => 'boolean',
             'questions.*.is_required' => 'boolean',
             'questions.*.options' => 'required|array|min:2',
-            'questions.*.options.*' => 'required|string|max:255',
+            'questions.*.options.*' => 'required|string|max:250',
         ], [
             'title.required' => 'Aptaujas nosaukums ir obligāts.',
-            'title.max' => 'Aptaujas nosaukums nedrīkst pārsniegt 255 rakstzīmes.',
+            'title.max' => 'Aptaujas nosaukums nedrīkst pārsniegt 100 rakstzīmes.',
             'description.max' => 'Apraksts nedrīkst pārsniegt 250 rakstzīmes.',
             'status.required' => 'Aptaujas statuss ir obligāts.',
             'status.in' => 'Nederīgs aptaujas statuss.',
@@ -137,11 +137,11 @@ class PollController extends Controller
             'questions.required' => 'Aptaujai jābūt vismaz vienam jautājumam.',
             'questions.min' => 'Aptaujai jābūt vismaz vienam jautājumam.',
             'questions.*.text.required' => 'Katram jautājumam jābūt tekstam.',
-            'questions.*.text.max' => 'Jautājuma teksts nedrīkst pārsniegt 500 rakstzīmes.',
+            'questions.*.text.max' => 'Jautājuma teksts nedrīkst pārsniegt 250 rakstzīmes.',
             'questions.*.options.required' => 'Katram jautājumam jābūt vismaz diviem variantiem.',
             'questions.*.options.min' => 'Katram jautājumam jābūt vismaz diviem variantiem.',
             'questions.*.options.*.required' => 'Atbildes varianta teksts nedrīkst būt tukšs.',
-            'questions.*.options.*.max' => 'Atbildes variants nedrīkst pārsniegt 255 rakstzīmes.',
+            'questions.*.options.*.max' => 'Atbildes variants nedrīkst pārsniegt 250 rakstzīmes.',
         ]);
 
         DB::transaction(function () use ($data, $poll) {
@@ -180,6 +180,17 @@ class PollController extends Controller
         });
 
         return response(['poll' => $poll->load('questions.options'), 'message' => 'Aptauja atjaunota veiksmīgi!']);
+    }
+
+    public function close(Request $request, Poll $poll)
+    {
+        if ($poll->user_id !== $request->user()->id) {
+            return response(['message' => 'Piekļuve liegta.'], 403);
+        }
+
+        $poll->update(['status' => 'closed']);
+
+        return response(['poll' => $poll, 'message' => 'Aptauja slēgta veiksmīgi.']);
     }
 
     public function destroy(Request $request, Poll $poll)

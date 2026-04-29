@@ -1,6 +1,5 @@
 import home_icon from "../assets/images/home_icon.png"
 import active_polls_icon from "../assets/images/active_polls.png"
-import results_icon from "../assets/images/bar_chart_icon.png"
 import settings_icon from "../assets/images/user_settings_icon.png"
 import support_icon from "../assets/images/support_icon.png"
 import logout_icon from "../assets/images/logout.png"
@@ -76,31 +75,17 @@ function Sidebar({ isOpen, setIsOpen }) {
                     </Link>
 
                     <Link
-                        to="/results"
+                        to="/polls"
                         onClick={() => setIsOpen(false)}
-                        className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 ease-in-out ${isActive("/results") ? "bg-primary/10 text-primary border-r-4 border-primary" : "text-accent-gray hover:bg-gray-200"}`}
-                    >
-                        <img
-                            src={results_icon}
-                            alt="Rezultāti"
-                            className={`w-6 h-6 object-contain transition-all duration-200 ${isActive("/results") ? "" : "opacity-75"}`}
-                            style={isActive("/results") ? { filter: "invert(11%) sepia(68%) saturate(4529%) hue-rotate(298deg) brightness(85%) contrast(106%)" } : {}}
-                        />
-                        <span className="font-semibold tracking-wide text-sm">Rezultāti</span>
-                    </Link>
-
-                    <Link
-                        to="/active-polls"
-                        onClick={() => setIsOpen(false)}
-                        className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 ease-in-out ${isActive("/active-polls") ? "bg-primary/10 text-primary border-r-4 border-primary" : "text-accent-gray hover:bg-gray-200"}`}
+                        className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 ease-in-out ${isActive("/polls") ? "bg-primary/10 text-primary border-r-4 border-primary" : "text-accent-gray hover:bg-gray-200"}`}
                     >
                         <img
                             src={active_polls_icon}
                             alt="Aktīvās aptaujas"
-                            className={`w-6 h-6 object-contain transition-all duration-200 ${isActive("/active-polls") ? "" : "opacity-75"}`}
-                            style={isActive("/active-polls") ? { filter: "invert(11%) sepia(68%) saturate(4529%) hue-rotate(298deg) brightness(85%) contrast(106%)" } : {}}
+                            className={`w-6 h-6 object-contain transition-all duration-200 ${isActive("/polls") ? "" : "opacity-75"}`}
+                            style={isActive("/polls") ? { filter: "invert(11%) sepia(68%) saturate(4529%) hue-rotate(298deg) brightness(85%) contrast(106%)" } : {}}
                         />
-                        <span className="font-semibold tracking-wide text-sm">Aktīvās aptaujas</span>
+                        <span className="font-semibold tracking-wide text-sm">Manas aptaujas</span>
                     </Link>
 
                     <Link

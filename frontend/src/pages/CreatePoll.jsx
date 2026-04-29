@@ -114,7 +114,54 @@ function CreatePoll() {
 
     const handleDragEnd = () => setDraggedItemIndex(null)
 
+    const validate = () => {
+        const newErrors = {}
+        if (!pollData.title.trim()) {
+            newErrors.title = 'Aptaujas nosaukums ir obligāts.'
+        }
+        if (pollData.hasDeadline && pollData.deadline) {
+            const selected = new Date(pollData.deadline + 'T00:00:00')
+            const today = new Date()
+            today.setHours(0, 0, 0, 0)
+            if (selected < today) {
+                newErrors.deadline = 'Termiņam jābūt nākotnē.'
+            }
+        }
+        questions.forEach((q, qi) => {
+            if (!q.text.trim()) {
+                newErrors[`question_${qi}_text`] = `${qi + 1}. jautājumam jābūt tekstam.`
+            }
+            if (q.options.filter(o => o.trim()).length < 2) {
+                newErrors[`question_${qi}_options`] = `${qi + 1}. jautājumam jābūt vismaz diviem aizpildītiem variantiem.`
+            }
+        })
+        return newErrors
+    }
+
+    const normalizeErrors = (serverErrors) => {
+        const result = {}
+        for (const [key, messages] of Object.entries(serverErrors)) {
+            const msg = Array.isArray(messages) ? messages[0] : messages
+            const textMatch = key.match(/^questions\.(\d+)\.text$/)
+            const optionsMatch = key.match(/^questions\.(\d+)\.options/)
+            if (textMatch) {
+                result[`question_${textMatch[1]}_text`] = msg
+            } else if (optionsMatch) {
+                const k = `question_${optionsMatch[1]}_options`
+                if (!result[k]) result[k] = msg
+            } else {
+                result[key] = msg
+            }
+        }
+        return result
+    }
+
     const handleSubmit = async (status) => {
+        const validationErrors = validate()
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors)
+            return
+        }
         setErrors({})
         setIsSubmitting(true)
 
@@ -144,10 +191,10 @@ function CreatePoll() {
                     'Accept': 'application/json'
                 }
             })
-            navigate('/active-polls')
+            navigate('/polls')
         } catch (err) {
             if (err.response?.data?.errors) {
-                setErrors(err.response.data.errors)
+                setErrors(normalizeErrors(err.response.data.errors))
             } else {
                 setErrors({ general: 'Kļūda saglabājot aptauju. Lūdzu mēģiniet vēlreiz.' })
             }
@@ -285,7 +332,7 @@ function CreatePoll() {
                                                     onClick={() => addOption(questionIndex)}
                                                     className="flex items-center gap-2 text-primary font-bold text-sm mt-2"
                                                 >
-                                                    <span className="flex items-center justify-center w-5 h-5 rounded-full bg-primary text-white text-xs">+</span>
+                                                    <span className="flex items-center justify-center w-5 h-5 rounded-full bg-primary text-white text-xs leading-none pb-px">+</span>
                                                     Pievienot variantu
                                                 </button>
                                             </div>
@@ -298,7 +345,7 @@ function CreatePoll() {
                                 onClick={addQuestion}
                                 className="w-full py-8 rounded-2xl border-2 border-dashed border-gray-200 text-gray-400 font-bold flex flex-col items-center justify-center gap-2 hover:border-primary/40 hover:text-primary transition-all bg-white/50"
                             >
-                                <span className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-xl">+</span>
+                                <span className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-xl leading-none pb-px">+</span>
                                 Pievienot jaunu jautājumu
                             </button>
                         </div>
@@ -309,6 +356,7 @@ function CreatePoll() {
                                 setPollData={setPollData}
                                 isSubmitting={isSubmitting}
                                 onSubmit={handleSubmit}
+                                errors={errors}
                             />
 
                             <section className="bg-white space-y-2 p-6 rounded-2xl border border-gray-200 shadow-sm relative overflow-hidden">
