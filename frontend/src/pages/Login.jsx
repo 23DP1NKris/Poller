@@ -43,6 +43,8 @@ function Login() {
                 setErrors(error.response.data.errors)
             } else if (error.response?.status === 401) {
                 setErrors({ general: ['Nepareizs e-pasts vai parole.'] })
+            } else if (error.response?.status === 429) {
+                setErrors({ general: ['Pārāk daudz mēģinājumu. Lūdzu uzgaidiet minūti un mēģiniet vēlreiz.'] })
             } else {
                 setErrors({ general: ['Pieslēgšanās neizdevās. Lūdzu mēģiniet vēlreiz.'] })
             }

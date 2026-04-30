@@ -6,9 +6,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PollController;
 use App\Http\Controllers\PublicPollController;
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:register');
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login');
 
+Route::get('/public/polls', [PublicPollController::class, 'index']);
 Route::get('/public/polls/{poll}', [PublicPollController::class, 'show']);
 Route::post('/public/polls/{poll}/respond', [PublicPollController::class, 'respond']);
 

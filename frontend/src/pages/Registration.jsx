@@ -53,6 +53,8 @@ function Registration() {
         } catch (error) {
             if (error.response?.status === 422) {
                 setErrors(error.response.data.errors)
+            } else if (error.response?.status === 429) {
+                setErrors({ general: ['Pārāk daudz mēģinājumu. Lūdzu uzgaidiet minūti un mēģiniet vēlreiz.'] })
             } else {
                 setErrors({ general: ['Reģistrācija neizdevās. Lūdzu mēģiniet vēlreiz.'] })
             }
