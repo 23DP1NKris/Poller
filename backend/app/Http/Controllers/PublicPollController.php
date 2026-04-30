@@ -11,6 +11,20 @@ use Illuminate\Support\Str;
 
 class PublicPollController extends Controller
 {
+    public function index(Request $request)
+    {
+        $user = auth('sanctum')->user();
+
+        $polls = Poll::where('status', 'active')
+            ->where('is_public', true)
+            ->when($user, fn($q) => $q->where('user_id', '!=', $user->id))
+            ->withCount(['responses', 'questions'])
+            ->orderByDesc('created_at')
+            ->paginate(20);
+
+        return response($polls);
+    }
+
     public function show(Request $request, Poll $poll)
     {
         if ($poll->status !== 'active') {

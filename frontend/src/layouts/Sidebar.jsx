@@ -1,5 +1,6 @@
 import home_icon from "../assets/images/home_icon.png"
 import active_polls_icon from "../assets/images/active_polls.png"
+import search_icon from "../assets/images/search_icon.png"
 import settings_icon from "../assets/images/user_settings_icon.png"
 import support_icon from "../assets/images/support_icon.png"
 import logout_icon from "../assets/images/logout.png"
@@ -72,6 +73,20 @@ function Sidebar({ isOpen, setIsOpen }) {
                             style={isActive("/home") ? { filter: "invert(11%) sepia(68%) saturate(4529%) hue-rotate(298deg) brightness(85%) contrast(106%)" } : {}}
                         />
                         <span className="font-semibold tracking-wide text-sm">Sākums</span>
+                    </Link>
+
+                    <Link
+                        to="/discover"
+                        onClick={() => setIsOpen(false)}
+                        className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 ease-in-out ${isActive("/discover") ? "bg-primary/10 text-primary border-r-4 border-primary" : "text-accent-gray hover:bg-gray-200"}`}
+                    >
+                        <img
+                            src={search_icon}
+                            alt="Atklāt"
+                            className={`w-6 h-6 object-contain transition-all duration-200 ${isActive("/discover") ? "" : "opacity-75"}`}
+                            style={isActive("/discover") ? { filter: "invert(11%) sepia(68%) saturate(4529%) hue-rotate(298deg) brightness(85%) contrast(106%)" } : {}}
+                        />
+                        <span className="font-semibold tracking-wide text-sm">Atklāt</span>
                     </Link>
 
                     <Link
