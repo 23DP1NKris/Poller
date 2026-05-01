@@ -18,6 +18,7 @@ class PollController extends Controller
                     $q->orderBy('order')->withCount('responses as votes_count');
                 }]);
             }])
+            ->withCount('responses')
             ->orderByDesc('created_at')
             ->get();
 

@@ -66,7 +66,7 @@ function Discover() {
 
                     {!pollsLoading && polls.length > 0 && (
                         <div className="relative mb-6 max-w-md">
-                            <img src={search_icon} className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 opacity-40" alt="" />
+                            <img src={search_icon} className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 opacity-40" alt="Meklēt aptaujas" />
                             <input
                                 type="text"
                                 value={searchQuery}
