@@ -9,8 +9,11 @@ import Logo from "../components/Logo.jsx"
 import axios from 'axios'
 import { Link } from "react-router-dom"
 import UserPreview from "../components/UserPreview.jsx"
+import { useAuth } from "../context/AuthContext.jsx"
+import admin_icon from "../assets/images/admin_icon.png"
 
 function Sidebar({ isOpen, setIsOpen }) {
+    const { user } = useAuth()
     const handleLogout = async () => {
         const token = localStorage.getItem('token')
         try {
@@ -116,6 +119,22 @@ function Sidebar({ isOpen, setIsOpen }) {
                         />
                         <span className="font-semibold tracking-wide text-sm">Iestatījumi</span>
                     </Link>
+
+                    {user?.role === 'admin' && (
+                        <Link
+                            to="/dashboard"
+                            onClick={() => setIsOpen(false)}
+                            className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 ease-in-out ${isActive("/dashboard") ? "bg-primary/10 text-primary border-r-4 border-primary" : "text-accent-gray hover:bg-gray-200"}`}
+                        >
+                            <img
+                                src={admin_icon}
+                                alt="Administrācija"
+                                className={`w-6 h-6 object-contain transition-all duration-200 ${isActive("/dashboard") ? "" : "opacity-75"}`}
+                                style={isActive("/dashboard") ? { filter: "invert(11%) sepia(68%) saturate(4529%) hue-rotate(298deg) brightness(85%) contrast(106%)" } : {}}
+                            />
+                            <span className="font-semibold tracking-wide text-sm">Administrācija</span>
+                        </Link>
+                    )}
 
                     <Link
                         to="/support"
