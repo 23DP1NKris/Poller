@@ -1,44 +1,15 @@
-import { useState } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Navigate } from 'react-router-dom'
+import axios from 'axios'
 import { useAuth } from '../context/AuthContext.jsx'
 import Sidebar from '../layouts/Sidebar.jsx'
 import DashboardHeader from '../layouts/DashboardHeader.jsx'
 import StatCard from '../components/StatCard.jsx'
+import DeleteAccountConfirmation from '../components/DeleteAccountConfirmation.jsx'
 import bar_chart_icon from '../assets/images/bar_chart_icon.png'
 import active_polls_icon from '../assets/images/active_polls.png'
 import user_icon from '../assets/images/user_icon.png'
 import admin_icon from '../assets/images/admin_icon.png'
-
-//added mock data with ai
-const mockStats = {
-    totalUsers: 142,
-    totalPolls: 67,
-    totalResponses: 3821,
-    activePolls: 23,
-}
-
-const mockUsers = [
-    { id: 1, username: 'Jānis Bērziņš',   email: 'janis@piemers.lv',   polls: 8,  joined: '2026-01-10', role: 'user' },
-    { id: 2, username: 'Anna Kalniņa',     email: 'anna@piemers.lv',    polls: 3,  joined: '2026-01-22', role: 'user' },
-    { id: 3, username: 'Pēteris Ozoliņš', email: 'peteris@piemers.lv', polls: 12, joined: '2026-02-05', role: 'user' },
-    { id: 4, username: 'Marta Liepiņa',   email: 'marta@piemers.lv',   polls: 1,  joined: '2026-02-18', role: 'user' },
-    { id: 5, username: 'Kārlis Vītols',   email: 'karlis@piemers.lv',  polls: 5,  joined: '2026-03-01', role: 'user' },
-    { id: 6, username: 'Ilze Krūmiņa',    email: 'ilze@piemers.lv',    polls: 0,  joined: '2026-03-14', role: 'user' },
-    { id: 7, username: 'PollerDemo',       email: 'demo@poller.lv',     polls: 20, joined: '2026-01-01', role: 'user' },
-]
-
-const mockPolls = [
-    { id: 1,  title: 'Kāds ir tavs iecienītākais gadalaiks?',       author: 'PollerDemo',       responses: 54, status: 'active' },
-    { id: 2,  title: 'Kādu transportu izmanto, dodoties uz darbu?', author: 'PollerDemo',       responses: 38, status: 'active' },
-    { id: 3,  title: 'Kāda mūzika tev patīk visvairāk?',           author: 'PollerDemo',       responses: 71, status: 'active' },
-    { id: 4,  title: 'Kāds sports tev patīk?',                     author: 'Jānis Bērziņš',   responses: 22, status: 'active' },
-    { id: 5,  title: 'Kādas ir tavas vasaras aktivitātes?',         author: 'Anna Kalniņa',    responses: 15, status: 'active' },
-    { id: 6,  title: 'Kāda ir tava darba vide?',                   author: 'Pēteris Ozoliņš', responses: 49, status: 'closed' },
-    { id: 7,  title: 'Vai tev ir mājdzīvnieks?',                   author: 'PollerDemo',       responses: 63, status: 'active' },
-    { id: 8,  title: 'Kādus sociālos tīklus tu izmanto?',          author: 'Kārlis Vītols',   responses: 31, status: 'active' },
-    { id: 9,  title: 'Kā tu svin Ziemassvētkus?',                  author: 'Marta Liepiņa',   responses: 8,  status: 'draft'  },
-    { id: 10, title: 'Latvija vai ārzemēs — kur dzīvot?',          author: 'PollerDemo',       responses: 44, status: 'active' },
-]
 
 const statusStyles = {
     active: 'text-green-600 bg-green-50',
@@ -54,13 +25,84 @@ const statusLabels = {
 
 const primaryFilter = 'invert(11%) sepia(68%) saturate(4529%) hue-rotate(298deg) brightness(85%) contrast(106%)'
 
+function useAdminData(token) {
+    const [stats, setStats]         = useState(null)
+    const [users, setUsers]         = useState([])
+    const [polls, setPolls]         = useState([])
+    const [loadingStats, setLoadingStats] = useState(true)
+    const [loadingUsers, setLoadingUsers] = useState(true)
+    const [loadingPolls, setLoadingPolls] = useState(true)
+
+    useEffect(() => {
+        const headers = { Authorization: `Bearer ${token}`, Accept: 'application/json' }
+        axios.get('http://127.0.0.1:8000/api/admin/stats', { headers })
+            .then(r => setStats(r.data))
+            .finally(() => setLoadingStats(false))
+    }, [token])
+
+    useEffect(() => {
+        const headers = { Authorization: `Bearer ${token}`, Accept: 'application/json' }
+        axios.get('http://127.0.0.1:8000/api/admin/users', { headers })
+            .then(r => setUsers(r.data))
+            .finally(() => setLoadingUsers(false))
+    }, [token])
+
+    useEffect(() => {
+        const headers = { Authorization: `Bearer ${token}`, Accept: 'application/json' }
+        axios.get('http://127.0.0.1:8000/api/admin/polls', { headers })
+            .then(r => setPolls(r.data))
+            .finally(() => setLoadingPolls(false))
+    }, [token])
+
+    return { stats, users, setUsers, polls, setPolls, loadingStats, loadingUsers, loadingPolls }
+}
+
 function Dashboard() {
     const { user, loading } = useAuth()
+    const token = localStorage.getItem('token')
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-    const [activeTab, setActiveTab] = useState('overview')
-    const [userSearch, setUserSearch] = useState('')
-    const [pollSearch, setPollSearch] = useState('')
+    const [activeTab, setActiveTab]         = useState('overview')
+    const [userSearch, setUserSearch]       = useState('')
+    const [pollSearch, setPollSearch]       = useState('')
+    const [deletingId, setDeletingId]       = useState(null)
+    const [confirmAction, setConfirmAction] = useState(null) // { type: 'user'|'poll', id, label }
+
+const { stats, users, setUsers, polls, setPolls, loadingStats, loadingUsers, loadingPolls } =
+        useAdminData(token)
+
+    const headers = { Authorization: `Bearer ${token}`, Accept: 'application/json' }
+
+    const filteredUsers = useMemo(() =>
+        users.filter(u =>
+            u.username.toLowerCase().includes(userSearch.toLowerCase()) ||
+            u.email.toLowerCase().includes(userSearch.toLowerCase())
+        ), [users, userSearch])
+
+    const filteredPolls = useMemo(() =>
+        polls.filter(p =>
+            p.title.toLowerCase().includes(pollSearch.toLowerCase()) ||
+            p.author.toLowerCase().includes(pollSearch.toLowerCase())
+        ), [polls, pollSearch])
+
+    const confirmDelete = async () => {
+        if (!confirmAction) return
+        const { type, id } = confirmAction
+        setConfirmAction(null)
+        setDeletingId(id)
+        try {
+            await axios.delete(`http://127.0.0.1:8000/api/admin/${type}s/${id}`, { headers })
+            if (type === 'user') setUsers(prev => prev.filter(u => u.id !== id))
+            else setPolls(prev => prev.filter(p => p.id !== id))
+        } catch {
+            // row stays in list if delete failed
+        } finally {
+            setDeletingId(null)
+        }
+    }
+
+    const handleDeleteUser = (id, label) => setConfirmAction({ type: 'user', id, label })
+    const handleDeletePoll = (id, label) => setConfirmAction({ type: 'poll', id, label })
 
     if (loading) return (
         <p className="flex h-screen items-center justify-center font-semibold text-gray-500">Ielādējas...</p>
@@ -68,16 +110,6 @@ function Dashboard() {
 
     if (!user) return <Navigate to="/login" />
     if (user.role !== 'admin') return <Navigate to="/home" />
-
-    const filteredUsers = mockUsers.filter(u =>
-        u.username.toLowerCase().includes(userSearch.toLowerCase()) ||
-        u.email.toLowerCase().includes(userSearch.toLowerCase())
-    )
-
-    const filteredPolls = mockPolls.filter(p =>
-        p.title.toLowerCase().includes(pollSearch.toLowerCase()) ||
-        p.author.toLowerCase().includes(pollSearch.toLowerCase())
-    )
 
     const tabs = [
         { key: 'overview', label: 'Pārskats' },
@@ -117,10 +149,10 @@ function Dashboard() {
                     {activeTab === 'overview' && (
                         <div className="space-y-8">
                             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-                                <StatCard icon={user_icon}        iconBg="bg-blue-50"      value={mockStats.totalUsers}     label="Lietotāji" />
-                                <StatCard icon={active_polls_icon} iconBg="bg-green-50"   value={mockStats.activePolls}    label="Aktīvās aptaujas" />
-                                <StatCard icon={admin_icon}        iconBg="bg-primary/10" iconFilter={primaryFilter} value={mockStats.totalPolls}     label="Kopā aptaujas" />
-                                <StatCard icon={bar_chart_icon}    iconBg="bg-amber-50"   iconFilter="invert(60%) sepia(80%) saturate(400%) hue-rotate(5deg)" value={mockStats.totalResponses}  label="Kopā atbildes" />
+                                <StatCard icon={user_icon}         iconBg="bg-blue-50"      value={loadingStats ? '—' : stats?.total_users}     label="Lietotāji" />
+                                <StatCard icon={active_polls_icon} iconBg="bg-green-50"     value={loadingStats ? '—' : stats?.active_polls}    label="Aktīvās aptaujas" />
+                                <StatCard icon={admin_icon}        iconBg="bg-primary/10"   iconFilter={primaryFilter} value={loadingStats ? '—' : stats?.total_polls}     label="Kopā aptaujas" />
+                                <StatCard icon={bar_chart_icon}    iconBg="bg-amber-50"     iconFilter="invert(60%) sepia(80%) saturate(400%) hue-rotate(5deg)" value={loadingStats ? '—' : stats?.total_responses}  label="Kopā atbildes" />
                             </div>
 
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -134,15 +166,18 @@ function Dashboard() {
                                         </button>
                                     </div>
                                     <div className="divide-y divide-gray-50">
-                                        {mockUsers.slice(0, 5).map(u => (
-                                            <div key={u.id} className="px-6 py-3 flex items-center justify-between gap-4">
-                                                <div className="min-w-0">
-                                                    <p className="text-sm font-semibold text-gray-900 truncate">{u.username}</p>
-                                                    <p className="text-xs text-gray-400 truncate">{u.email}</p>
+                                        {loadingUsers
+                                            ? <p className="text-center text-gray-400 text-sm py-8">Ielādējas...</p>
+                                            : users.slice(0, 5).map(u => (
+                                                <div key={u.id} className="px-6 py-3 flex items-center justify-between gap-4">
+                                                    <div className="min-w-0">
+                                                        <p className="text-sm font-semibold text-gray-900 truncate">{u.username}</p>
+                                                        <p className="text-xs text-gray-400 truncate">{u.email}</p>
+                                                    </div>
+                                                    <span className="text-xs text-gray-400 shrink-0">{u.joined}</span>
                                                 </div>
-                                                <span className="text-xs text-gray-400 shrink-0">{u.joined}</span>
-                                            </div>
-                                        ))}
+                                            ))
+                                        }
                                     </div>
                                 </div>
 
@@ -155,14 +190,17 @@ function Dashboard() {
                                         </button>
                                     </div>
                                     <div className="divide-y divide-gray-50">
-                                        {mockPolls.slice(0, 5).map(p => (
-                                            <div key={p.id} className="px-6 py-3 flex items-center justify-between gap-4">
-                                                <p className="text-sm font-semibold text-gray-900 truncate flex-1">{p.title}</p>
-                                                <span className={`text-xs font-semibold px-2 py-0.5 rounded-md shrink-0 ${statusStyles[p.status]}`}>
-                                                    {statusLabels[p.status]}
-                                                </span>
-                                            </div>
-                                        ))}
+                                        {loadingPolls
+                                            ? <p className="text-center text-gray-400 text-sm py-8">Ielādējas...</p>
+                                            : polls.slice(0, 5).map(p => (
+                                                <div key={p.id} className="px-6 py-3 flex items-center justify-between gap-4">
+                                                    <p className="text-sm font-semibold text-gray-900 truncate flex-1">{p.title}</p>
+                                                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-md shrink-0 ${statusStyles[p.status]}`}>
+                                                        {statusLabels[p.status]}
+                                                    </span>
+                                                </div>
+                                            ))
+                                        }
                                     </div>
                                 </div>
 
@@ -184,39 +222,50 @@ function Dashboard() {
                                 />
                             </div>
                             <div className="overflow-x-auto">
-                                <table className="w-full text-sm">
-                                    <thead>
-                                        <tr className="text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100">
-                                            <th className="px-6 py-3 text-left">Lietotājs</th>
-                                            <th className="px-6 py-3 text-left">E-pasts</th>
-                                            <th className="px-6 py-3 text-left">Aptaujas</th>
-                                            <th className="px-6 py-3 text-left">Reģistrācija</th>
-                                            <th className="px-6 py-3 text-left">Loma</th>
-                                            <th className="px-6 py-3 text-left">Darbības</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-gray-50">
-                                        {filteredUsers.map(u => (
-                                            <tr key={u.id} className="hover:bg-gray-50 transition-colors">
-                                                <td className="px-6 py-4 font-semibold text-gray-900">{u.username}</td>
-                                                <td className="px-6 py-4 text-gray-500">{u.email}</td>
-                                                <td className="px-6 py-4 text-gray-700 font-medium">{u.polls}</td>
-                                                <td className="px-6 py-4 text-gray-400">{u.joined}</td>
-                                                <td className="px-6 py-4">
-                                                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-md ${u.role === 'admin' ? 'bg-primary/10 text-primary' : 'bg-gray-100 text-gray-500'}`}>
-                                                        {u.role === 'admin' ? 'Admins' : 'Lietotājs'}
-                                                    </span>
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    <button className="text-xs font-semibold text-red-400 hover:text-red-600 transition-colors">
-                                                        Bloķēt
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                                {filteredUsers.length === 0 && (
+                                {loadingUsers
+                                    ? <p className="text-center text-gray-400 text-sm py-10">Ielādējas...</p>
+                                    : (
+                                        <table className="w-full text-sm">
+                                            <thead>
+                                                <tr className="text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100">
+                                                    <th className="px-6 py-3 text-left">Lietotājs</th>
+                                                    <th className="px-6 py-3 text-left">E-pasts</th>
+                                                    <th className="px-6 py-3 text-left">Aptaujas</th>
+                                                    <th className="px-6 py-3 text-left">Reģistrācija</th>
+                                                    <th className="px-6 py-3 text-left">Loma</th>
+                                                    <th className="px-6 py-3 text-left">Darbības</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-gray-50">
+                                                {filteredUsers.map(u => (
+                                                    <tr key={u.id} className="hover:bg-gray-50 transition-colors">
+                                                        <td className="px-6 py-4 font-semibold text-gray-900">{u.username}</td>
+                                                        <td className="px-6 py-4 text-gray-500">{u.email}</td>
+                                                        <td className="px-6 py-4 text-gray-700 font-medium">{u.polls}</td>
+                                                        <td className="px-6 py-4 text-gray-400">{u.joined}</td>
+                                                        <td className="px-6 py-4">
+                                                            <span className={`text-xs font-semibold px-2 py-0.5 rounded-md ${u.role === 'admin' ? 'bg-primary/10 text-primary' : 'bg-gray-100 text-gray-500'}`}>
+                                                                {u.role === 'admin' ? 'Admins' : 'Lietotājs'}
+                                                            </span>
+                                                        </td>
+                                                        <td className="px-6 py-4">
+                                                            {u.role !== 'admin' && (
+                                                                <button
+                                                                    onClick={() => handleDeleteUser(u.id, u.username)}
+                                                                    disabled={deletingId === u.id}
+                                                                    className="text-xs font-semibold text-red-400 hover:text-red-600 transition-colors disabled:opacity-40"
+                                                                >
+                                                                    {deletingId === u.id ? '...' : 'Dzēst'}
+                                                                </button>
+                                                            )}
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    )
+                                }
+                                {!loadingUsers && filteredUsers.length === 0 && (
                                     <p className="text-center text-gray-400 text-sm py-10">Nav rezultātu.</p>
                                 )}
                             </div>
@@ -237,37 +286,46 @@ function Dashboard() {
                                 />
                             </div>
                             <div className="overflow-x-auto">
-                                <table className="w-full text-sm">
-                                    <thead>
-                                        <tr className="text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100">
-                                            <th className="px-6 py-3 text-left">Nosaukums</th>
-                                            <th className="px-6 py-3 text-left">Autors</th>
-                                            <th className="px-6 py-3 text-left">Atbildes</th>
-                                            <th className="px-6 py-3 text-left">Statuss</th>
-                                            <th className="px-6 py-3 text-left">Darbības</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-gray-50">
-                                        {filteredPolls.map(p => (
-                                            <tr key={p.id} className="hover:bg-gray-50 transition-colors">
-                                                <td className="px-6 py-4 font-semibold text-gray-900 max-w-xs truncate">{p.title}</td>
-                                                <td className="px-6 py-4 text-gray-500">{p.author}</td>
-                                                <td className="px-6 py-4 text-gray-700 font-medium">{p.responses}</td>
-                                                <td className="px-6 py-4">
-                                                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-md ${statusStyles[p.status]}`}>
-                                                        {statusLabels[p.status]}
-                                                    </span>
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    <button className="text-xs font-semibold text-red-400 hover:text-red-600 transition-colors">
-                                                        Dzēst
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                                {filteredPolls.length === 0 && (
+                                {loadingPolls
+                                    ? <p className="text-center text-gray-400 text-sm py-10">Ielādējas...</p>
+                                    : (
+                                        <table className="w-full text-sm">
+                                            <thead>
+                                                <tr className="text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100">
+                                                    <th className="px-6 py-3 text-left">Nosaukums</th>
+                                                    <th className="px-6 py-3 text-left">Autors</th>
+                                                    <th className="px-6 py-3 text-left">Atbildes</th>
+                                                    <th className="px-6 py-3 text-left">Statuss</th>
+                                                    <th className="px-6 py-3 text-left">Darbības</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-gray-50">
+                                                {filteredPolls.map(p => (
+                                                    <tr key={p.id} className="hover:bg-gray-50 transition-colors">
+                                                        <td className="px-6 py-4 font-semibold text-gray-900 max-w-xs truncate">{p.title}</td>
+                                                        <td className="px-6 py-4 text-gray-500">{p.author}</td>
+                                                        <td className="px-6 py-4 text-gray-700 font-medium">{p.responses}</td>
+                                                        <td className="px-6 py-4">
+                                                            <span className={`text-xs font-semibold px-2 py-0.5 rounded-md ${statusStyles[p.status]}`}>
+                                                                {statusLabels[p.status]}
+                                                            </span>
+                                                        </td>
+                                                        <td className="px-6 py-4">
+                                                            <button
+                                                                onClick={() => handleDeletePoll(p.id, p.title)}
+                                                                disabled={deletingId === p.id}
+                                                                className="text-xs font-semibold text-red-400 hover:text-red-600 transition-colors disabled:opacity-40"
+                                                            >
+                                                                {deletingId === p.id ? '...' : 'Dzēst'}
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    )
+                                }
+                                {!loadingPolls && filteredPolls.length === 0 && (
                                     <p className="text-center text-gray-400 text-sm py-10">Nav rezultātu.</p>
                                 )}
                             </div>
@@ -276,6 +334,19 @@ function Dashboard() {
 
                 </main>
             </div>
+
+            <DeleteAccountConfirmation
+                isConfirmOpen={!!confirmAction}
+                onClose={() => setConfirmAction(null)}
+                onConfirm={confirmDelete}
+                loading={deletingId === confirmAction?.id}
+                showCountdown={false}
+                message={confirmAction?.type === 'user'
+                    ? `Lietotājs "${confirmAction.label}" tiks neatgriezeniski dzēsts kopā ar visiem viņa datiem.`
+                    : `Aptauja "${confirmAction?.label}" tiks neatgriezeniski dzēsta no sistēmas.`
+                }
+                confirmText='Es saprotu, dzēst'
+            />
         </div>
     )
 }

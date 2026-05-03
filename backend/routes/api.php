@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PollController;
 use App\Http\Controllers\PublicPollController;
@@ -21,6 +22,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request)
     {
         return $request->user();
+    });
+
+    Route::middleware('admin')->group(function () {
+        Route::get('/admin/stats',           [AdminController::class, 'stats']);
+        Route::get('/admin/users',           [AdminController::class, 'users']);
+        Route::get('/admin/polls',           [AdminController::class, 'polls']);
+        Route::delete('/admin/users/{user}', [AdminController::class, 'destroyUser']);
+        Route::delete('/admin/polls/{poll}', [AdminController::class, 'destroyPoll']);
     });
 
     Route::patch('polls/{poll}/close', [PollController::class, 'close']);

@@ -47,4 +47,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function polls()
+    {
+        return $this->hasMany(\App\Models\Poll::class);
+    }
 }

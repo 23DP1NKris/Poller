@@ -1,12 +1,20 @@
 import { useState, useEffect } from "react"
 
-function DeleteAccountConfirmation({ isConfirmOpen, onClose, onConfirm, loading }) {
+function DeleteAccountConfirmation({
+    isConfirmOpen,
+    onClose,
+    onConfirm,
+    loading,
+    message = 'Šī darbība ir neatgriezeniska. Visi Jūsu dati tiks neatgriezeniski dzēsti no mūsu sistēmas.',
+    confirmText = 'Es saprotu, dzēst kontu',
+    showCountdown = true,
+}) {
     const [countdown, setCountdown] = useState(5)
 
     useEffect(() => {
         let timer
 
-        if (isConfirmOpen) {
+        if (isConfirmOpen && showCountdown) {
             if (countdown > 0) {
                 timer = setTimeout(() => setCountdown(prev => prev - 1), 1000)
             }
@@ -15,7 +23,7 @@ function DeleteAccountConfirmation({ isConfirmOpen, onClose, onConfirm, loading 
         }
 
         return () => clearTimeout(timer)
-    }, [isConfirmOpen, countdown])
+    }, [isConfirmOpen, countdown, showCountdown])
 
     useEffect(() => {
         if (isConfirmOpen) {
@@ -33,20 +41,20 @@ function DeleteAccountConfirmation({ isConfirmOpen, onClose, onConfirm, loading 
             <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl transition-all">
                 <h2 className="text-2xl font-bold text-primary mb-4 text-center">Vai Jūs esat pārliecināti?</h2>
                 <p className="text-gray-500 text-center mb-8">
-                    Šī darbība ir neatgriezeniska. Visi Jūsu dati tiks neatgriezeniski dzēsti no mūsu sistēmas.
+                    {message}
                 </p>
 
                 <div className="flex flex-col gap-3">
                     <button
-                        disabled={countdown > 0 || loading}
+                        disabled={(showCountdown && countdown > 0) || loading}
                         onClick={onConfirm}
                         className={`w-full py-4 rounded-xl font-bold transition-all duration-300 ${
-                            countdown > 0 || loading
+                            (showCountdown && countdown > 0) || loading
                                 ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                                 : "bg-red-700 text-white hover:bg-red-600 shadow-lg shadow-red-200"
                         }`}
                     >
-                        {loading ? "Dzēš..." : countdown > 0 ? `Dzēst kontu (${countdown})` : "Es saprotu, dzēst kontu"}
+                        {loading ? "Dzēš..." : (showCountdown && countdown > 0) ? `${confirmText} (${countdown})` : confirmText}
                     </button>
 
                     <button
