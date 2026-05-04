@@ -8,6 +8,10 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+        document.body.style.overflow = ''
+    }, [user])
+
+    useEffect(() => {
         const checkAuth = async () => {
             const token = localStorage.getItem('token')
 
