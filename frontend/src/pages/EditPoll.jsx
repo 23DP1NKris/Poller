@@ -63,11 +63,12 @@ function EditPoll() {
                 })
                 setQuestions(poll.questions.map(q => ({
                     id: Date.now() + Math.random(),
+                    questionId: q.id,
                     text: q.text,
                     isExpanded: true,
                     isMultipleChoice: q.is_multiple_choice,
                     isRequired: q.is_required,
-                    options: q.options.map(o => o.text)
+                    options: q.options.map(o => ({ optionId: o.id, text: o.text }))
                 })))
             } catch (err) {
                 console.error('Failed to fetch poll:', err)
@@ -82,11 +83,12 @@ function EditPoll() {
     const addQuestion = () => {
         setQuestions(prev => [...prev, {
             id: Date.now() + Math.random(),
+            questionId: null,
             text: '',
             isExpanded: true,
             isMultipleChoice: false,
             isRequired: false,
-            options: ['', '']
+            options: [{ optionId: null, text: '' }, { optionId: null, text: '' }]
         }])
     }
 
@@ -106,14 +108,14 @@ function EditPoll() {
         setQuestions(prev => prev.map((q, i) => {
             if (i !== questionIndex) return q
             const newOptions = [...q.options]
-            newOptions[optionIndex] = value
+            newOptions[optionIndex] = { ...newOptions[optionIndex], text: value }
             return { ...q, options: newOptions }
         }))
     }
 
     const addOption = (questionIndex) => {
         setQuestions(prev => prev.map((q, i) =>
-            i === questionIndex ? { ...q, options: [...q.options, ''] } : q
+            i === questionIndex ? { ...q, options: [...q.options, { optionId: null, text: '' }] } : q
         ))
     }
 
@@ -166,7 +168,7 @@ function EditPoll() {
             if (!q.text.trim()) {
                 newErrors[`question_${qi}_text`] = `${qi + 1}. jautājumam jābūt tekstam.`
             }
-            if (q.options.filter(o => o.trim()).length < 2) {
+            if (q.options.filter(o => o.text.trim()).length < 2) {
                 newErrors[`question_${qi}_options`] = `${qi + 1}. jautājumam jābūt vismaz diviem aizpildītiem variantiem.`
             }
         })
@@ -235,10 +237,13 @@ function EditPoll() {
             expires_at: pollData.hasDeadline && pollData.deadline ? pollData.deadline : null,
             categories: pollData.categories.length > 0 ? pollData.categories : null,
             questions: questions.map(q => ({
+                id: q.questionId ?? null,
                 text: q.text,
                 is_multiple_choice: q.isMultipleChoice,
                 is_required: q.isRequired,
-                options: q.options.filter(o => o.trim())
+                options: q.options
+                    .filter(o => o.text.trim())
+                    .map(o => ({ id: o.optionId ?? null, text: o.text }))
             }))
         }
 
@@ -393,7 +398,7 @@ function EditPoll() {
                                                         <div className="flex-1 p-3 bg-gray-50 rounded-xl border border-transparent group-focus-within:border-primary/20 transition-all">
                                                             <input
                                                                 type="text"
-                                                                value={option}
+                                                                value={option.text}
                                                                 onChange={(e) => handleOptionChange(questionIndex, optionIndex, e.target.value)}
                                                                 placeholder={`${optionIndex + 1}. variants`}
                                                                 className="bg-transparent w-full outline-none text-sm"

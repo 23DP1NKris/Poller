@@ -134,11 +134,13 @@ class PollController extends Controller
             'categories' => 'nullable|array',
             'categories.*' => 'string|max:50',
             'questions' => 'required|array|min:1',
+            'questions.*.id' => 'nullable|integer',
             'questions.*.text' => 'required|string|max:250',
             'questions.*.is_multiple_choice' => 'boolean',
             'questions.*.is_required' => 'boolean',
             'questions.*.options' => 'required|array|min:2',
-            'questions.*.options.*' => 'required|string|max:250',
+            'questions.*.options.*.id' => 'nullable|integer',
+            'questions.*.options.*.text' => 'required|string|max:250',
         ], [
             'title.required' => 'Aptaujas nosaukums ir obligāts.',
             'title.max' => 'Aptaujas nosaukums nedrīkst pārsniegt 100 rakstzīmes.',
@@ -152,8 +154,8 @@ class PollController extends Controller
             'questions.*.text.max' => 'Jautājuma teksts nedrīkst pārsniegt 250 rakstzīmes.',
             'questions.*.options.required' => 'Katram jautājumam jābūt vismaz diviem variantiem.',
             'questions.*.options.min' => 'Katram jautājumam jābūt vismaz diviem variantiem.',
-            'questions.*.options.*.required' => 'Atbildes varianta teksts nedrīkst būt tukšs.',
-            'questions.*.options.*.max' => 'Atbildes variants nedrīkst pārsniegt 250 rakstzīmes.',
+            'questions.*.options.*.text.required' => 'Atbildes varianta teksts nedrīkst būt tukšs.',
+            'questions.*.options.*.text.max' => 'Atbildes variants nedrīkst pārsniegt 250 rakstzīmes.',
         ]);
 
         DB::transaction(function () use ($data, $poll) {
@@ -170,24 +172,52 @@ class PollController extends Controller
                 'categories' => $data['categories'] ?? null,
             ]);
 
-            $poll->questions()->each(fn($q) => $q->options()->delete());
-            $poll->questions()->delete();
+            $keepQuestionIds = collect($data['questions'])->pluck('id')->filter()->values()->all();
+
+            // Delete questions removed by the user (cascade handles options + response_answers)
+            $poll->questions()
+                ->when(!empty($keepQuestionIds), fn($q) => $q->whereNotIn('id', $keepQuestionIds))
+                ->delete();
 
             foreach ($data['questions'] as $order => $questionData) {
-                $question = PollQuestion::create([
-                    'poll_id' => $poll->id,
-                    'text' => $questionData['text'],
-                    'is_multiple_choice' => $questionData['is_multiple_choice'] ?? false,
-                    'is_required' => $questionData['is_required'] ?? false,
-                    'order' => $order,
-                ]);
-
-                foreach ($questionData['options'] as $optionOrder => $optionText) {
-                    PollOption::create([
-                        'question_id' => $question->id,
-                        'text' => $optionText,
-                        'order' => $optionOrder,
+                if (!empty($questionData['id'])) {
+                    $question = PollQuestion::findOrFail($questionData['id']);
+                    $question->update([
+                        'text' => $questionData['text'],
+                        'is_multiple_choice' => $questionData['is_multiple_choice'] ?? false,
+                        'is_required' => $questionData['is_required'] ?? false,
+                        'order' => $order,
                     ]);
+                } else {
+                    $question = PollQuestion::create([
+                        'poll_id' => $poll->id,
+                        'text' => $questionData['text'],
+                        'is_multiple_choice' => $questionData['is_multiple_choice'] ?? false,
+                        'is_required' => $questionData['is_required'] ?? false,
+                        'order' => $order,
+                    ]);
+                }
+
+                $keepOptionIds = collect($questionData['options'])->pluck('id')->filter()->values()->all();
+
+                // Delete options removed by the user (cascade handles response_answers)
+                $question->options()
+                    ->when(!empty($keepOptionIds), fn($q) => $q->whereNotIn('id', $keepOptionIds))
+                    ->delete();
+
+                foreach ($questionData['options'] as $optionOrder => $optionData) {
+                    if (!empty($optionData['id'])) {
+                        PollOption::where('id', $optionData['id'])->update([
+                            'text' => $optionData['text'],
+                            'order' => $optionOrder,
+                        ]);
+                    } else {
+                        PollOption::create([
+                            'question_id' => $question->id,
+                            'text' => $optionData['text'],
+                            'order' => $optionOrder,
+                        ]);
+                    }
                 }
             }
         });
