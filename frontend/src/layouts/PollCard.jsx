@@ -107,6 +107,7 @@ function PollCard({ poll, copiedId, openMenuId, onShare, onDelete, onClose, onEd
                     <button
                         onClick={() => onToggleMenu(poll.id)}
                         className="p-2 rounded-xl hover:bg-gray-100 transition-colors"
+                        aria-label="Aptaujas darbības"
                     >
                         <img src={dots} className="w-5 h-5 opacity-50" alt="" />
                     </button>

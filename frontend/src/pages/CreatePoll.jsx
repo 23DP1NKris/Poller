@@ -255,28 +255,31 @@ function CreatePoll() {
                                                 onDragEnd={handleDragEnd}
                                                 className="cursor-grab active:cursor-grabbing p-1"
                                             >
-                                                <img src={drag_handle} className="w-5 h-5 opacity-30" alt="drag" />
+                                                <img src={drag_handle} className="w-5 h-5 opacity-30" alt="" />
                                             </div>
                                             <input
                                                 type="text"
                                                 value={question.text}
                                                 onChange={(e) => handleQuestionTextChange(questionIndex, e.target.value)}
                                                 placeholder="Ievadiet jautājumu..."
+                                                aria-label={`${questionIndex + 1}. jautājuma teksts`}
                                                 className="bg-transparent font-bold text-gray-800 outline-none w-full border-b border-transparent focus:border-primary/30"
                                             />
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <button
                                                 onClick={() => toggleQuestionSetting(questionIndex, 'isExpanded')}
+                                                aria-label={question.isExpanded ? 'Aizvērt jautājumu' : 'Izvērst jautājumu'}
                                                 className={`p-2 rounded-lg hover:bg-gray-100 transition-transform ${!question.isExpanded ? '-rotate-90' : ''}`}
                                             >
-                                                <img src={dropdown_arrow} className="w-5 h-5 opacity-60" alt="toggle" />
+                                                <img src={dropdown_arrow} className="w-5 h-5 opacity-60" alt="" />
                                             </button>
                                             <button
                                                 onClick={() => removeQuestion(question.id)}
+                                                aria-label="Dzēst jautājumu"
                                                 className="p-2 rounded-lg hover:bg-red-50 text-red-500 transition-colors"
                                             >
-                                                <img src={trash_icon} className="w-5 h-5" alt="delete" />
+                                                <img src={trash_icon} className="w-5 h-5" alt="" />
                                             </button>
                                         </div>
                                     </div>
@@ -287,6 +290,9 @@ function CreatePoll() {
                                                 <div className="flex items-center gap-3">
                                                     <span className="text-sm font-medium text-gray-600">Vienas izvēles</span>
                                                     <button
+                                                        role="switch"
+                                                        aria-checked={question.isMultipleChoice}
+                                                        aria-label="Vairāku izvēļu atbildes"
                                                         onClick={() => toggleQuestionSetting(questionIndex, 'isMultipleChoice')}
                                                         className={`w-10 h-5 rounded-full transition-colors relative ${question.isMultipleChoice ? 'bg-primary' : 'bg-gray-200'}`}
                                                     >
@@ -297,6 +303,9 @@ function CreatePoll() {
                                                 <div className="flex items-center gap-3">
                                                     <span className="text-sm font-medium text-gray-600">Obligāts</span>
                                                     <button
+                                                        role="switch"
+                                                        aria-checked={question.isRequired}
+                                                        aria-label="Obligāts jautājums"
                                                         onClick={() => toggleQuestionSetting(questionIndex, 'isRequired')}
                                                         className={`w-10 h-5 rounded-full transition-colors relative ${question.isRequired ? 'bg-primary' : 'bg-gray-200'}`}
                                                     >
@@ -314,11 +323,13 @@ function CreatePoll() {
                                                                 value={option}
                                                                 onChange={(e) => handleOptionChange(questionIndex, optionIndex, e.target.value)}
                                                                 placeholder={`${optionIndex + 1}. variants`}
+                                                                aria-label={`${questionIndex + 1}. jautājuma ${optionIndex + 1}. variants`}
                                                                 className="bg-transparent w-full outline-none text-sm"
                                                             />
                                                         </div>
                                                         <button
                                                             onClick={() => removeOption(questionIndex, optionIndex)}
+                                                            aria-label="Noņemt variantu"
                                                             className="opacity-0 group-hover:opacity-100 p-2 text-gray-400 hover:text-red-500 transition-all"
                                                         >
                                                             ✕
