@@ -55,13 +55,13 @@ php artisan db:seed --class=DummyPollSeeder
 
 ### Backend
 
-| Rīks            | Versija | Mērķis |
-|-----------------|---------|--------|
-| PHP             | 8.3.16  | Servera programmēšanas valoda |
-| Laravel         | 12      | PHP tīmekļa ietvars (REST API) |
-| Laravel Sanctum | 4.3.1   | Tokenu autentifikācija |
-| MySQL           | 8.4.3   | Datu bāze (izstrādes vidē) |
-| Composer        | 2.9.3   | PHP pakotņu pārvaldnieks |
+| Rīks            | Versija | Mērķis                         |
+|-----------------|---------|--------------------------------|
+| PHP             | 8.3.16  | Servera programmēšanas valoda  |
+| Laravel         | 12.55.1 | PHP tīmekļa ietvars (REST API) |
+| Laravel Sanctum | 4.3.1   | Tokenu autentifikācija         |
+| MySQL           | 8.4.3   | Datu bāze (izstrādes vidē)     |
+| Composer        | 2.9.3   | PHP pakotņu pārvaldnieks       |
 
 ### Frontend
 
@@ -90,6 +90,7 @@ php artisan db:seed --class=DummyPollSeeder
 - Reāllaika rezultāti
 - Iespēja slēpt rezultātus līdz balsošanas beigām
 - Balsošanas ierobežošana (piemēram, 1 balss no lietotāja)
+- Balsošana bez autorizācijas
 - Datu eksportēšana
 
 ### Administratora iespējas
