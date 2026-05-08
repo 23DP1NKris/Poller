@@ -107,7 +107,7 @@ function Support() {
                 <div className="space-y-4">
                     <FAQItem
                         question="Kā eksportēt aptauju datus uz Excel?"
-                        answer='Jūs varat eksportēt rezultātus "Rezultāti" sadaļā savai aptaujai, nospiežot "Eksportēt" pogu labajā augšējā stūrī. Mēs atbalstām CSV un XLSX formātus.'
+                        answer='Jūs varat eksportēt rezultātus "Rezultāti" sadaļā savai aptaujai, nospiežot "Eksportēt" pogu labajā augšējā stūrī. Mēs atbalstām CSV formātu.'
                     />
                     <FAQItem
                         question="Vai ir maksimālais iesniegto balšu un atbilžu skaits?"

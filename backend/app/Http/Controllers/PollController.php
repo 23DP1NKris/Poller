@@ -258,6 +258,37 @@ class PollController extends Controller
         return response(['poll' => $poll, 'message' => 'Aptauja atvērta.']);
     }
 
+    public function export(Request $request, Poll $poll)
+    {
+        if ($poll->user_id !== $request->user()->id) {
+            return response(['message' => 'Piekļuve liegta.'], 403);
+        }
+
+        $questions = $poll->questions()->orderBy('order')->get();
+
+        $responses = $poll->responses()
+            ->with(['answers.option'])
+            ->orderBy('created_at')
+            ->get();
+
+        $rows = $responses->map(function ($response) use ($questions) {
+            $row = [$response->id, $response->created_at->format('Y-m-d H:i')];
+            foreach ($questions as $question) {
+                $row[] = $response->answers
+                    ->filter(fn($a) => $a->question_id === $question->id)
+                    ->map(fn($a) => $a->option->text)
+                    ->join(', ');
+            }
+            return $row;
+        })->all();
+
+        return response([
+            'poll_title' => $poll->title,
+            'questions' => $questions->pluck('text')->all(),
+            'responses' => $rows,
+        ]);
+    }
+
     public function destroy(Request $request, Poll $poll)
     {
         if ($poll->user_id !== $request->user()->id) {

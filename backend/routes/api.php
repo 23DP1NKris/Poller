@@ -35,5 +35,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('polls/{poll}/close', [PollController::class, 'close']);
     Route::patch('polls/{poll}/pause', [PollController::class, 'pause']);
     Route::patch('polls/{poll}/open', [PollController::class, 'open']);
+    Route::get('polls/{poll}/export', [PollController::class, 'export']);
     Route::apiResource('polls', PollController::class);
 });

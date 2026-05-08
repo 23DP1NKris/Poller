@@ -6,6 +6,7 @@ import Sidebar from "../layouts/Sidebar.jsx"
 import DashboardHeader from "../layouts/DashboardHeader.jsx"
 import StatsCards from "../layouts/StatsCards.jsx"
 import WithBackgroundBtn from "../components/WithBackgroundBtn.jsx"
+import NoBackgroundBtn from "../components/NoBackgroundBtn.jsx"
 import bar_chart_icon from "../assets/images/bar_chart_icon.png"
 import dropdown_arrow_down from "../assets/images/dropdown_arrow_down.png"
 import close_icon from "../assets/images/close_icon.png"
@@ -68,6 +69,7 @@ function Results() {
     const [pollsLoading, setPollsLoading] = useState(true)
     const [expandedIds, setExpandedIds] = useState(new Set())
     const [fetchError, setFetchError] = useState(null)
+    const [isExporting, setIsExporting] = useState(false)
 
     useEffect(() => {
         const token = localStorage.getItem('token')
@@ -99,6 +101,42 @@ function Results() {
             next.has(pollId) ? next.delete(pollId) : next.add(pollId)
             return next
         })
+    }
+
+    const exportCSV = async () => {
+        setIsExporting(true)
+        try {
+            const token = localStorage.getItem('token')
+            const res = await axios.get(`http://127.0.0.1:8000/api/polls/${id}/export`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+            const { poll_title, questions, responses } = res.data
+
+            const escape = (val) => {
+                const str = String(val ?? '')
+                return str.includes(',') || str.includes('"') || str.includes('\n')
+                    ? `"${str.replace(/"/g, '""')}"`
+                    : str
+            }
+
+            const headers = ['Atbilžu ID', 'Iesniegšanas laiks', ...questions]
+            const lines = [
+                headers.map(escape).join(','),
+                ...responses.map(row => row.map(escape).join(','))
+            ]
+
+            const blob = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8;' })
+            const url = URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.href = url
+            a.download = `${poll_title}.csv`
+            a.click()
+            URL.revokeObjectURL(url)
+        } catch (err) {
+            console.error('Export failed:', err)
+        } finally {
+            setIsExporting(false)
+        }
     }
 
     if (loading) return (
@@ -172,6 +210,10 @@ function Results() {
                                             <p className="text-base text-gray-500 mt-1 max-w-2xl">{singlePoll.description}</p>
                                         )}
                                     </div>
+                                    <NoBackgroundBtn
+                                        text={isExporting ? 'Eksportē...' : 'Eksportēt CSV'}
+                                        onClick={exportCSV}
+                                    />
                                 </div>
                                 <PollResultDetail poll={singlePoll} />
                             </>
