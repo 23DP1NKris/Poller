@@ -53,7 +53,7 @@ function PollCard({ poll, copiedId, openMenuId, onShare, onDelete, onClose, onEd
 
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
                     <span className="text-xs text-gray-400">
-                        <span className="font-semibold text-gray-600">0</span> balsis
+                        <span className="font-semibold text-gray-600">{poll.responses_count ?? 0}</span> balsis
                     </span>
                     <span className="text-xs text-gray-300">·</span>
                     <span className="text-xs text-gray-400">{getTimeRemaining(poll.expires_at)}</span>

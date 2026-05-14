@@ -132,7 +132,7 @@ function Polls() {
                     </div>
 
                     <StatsCards stats={[
-                        { label: 'Kopējās balsis', value: 0 },
+                        { label: 'Kopējās balsis', value: polls.reduce((sum, p) => sum + (p.responses_count ?? 0), 0) },
                         { label: 'Aktīvās aptaujas', value: activeCount },
                         { label: 'Vidējā iesaiste', value: '-' },
                     ]} />
