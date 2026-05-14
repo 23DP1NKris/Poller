@@ -134,7 +134,7 @@ function Polls() {
                     <StatsCards stats={[
                         { label: 'Kopējās balsis', value: polls.reduce((sum, p) => sum + (p.responses_count ?? 0), 0) },
                         { label: 'Aktīvās aptaujas', value: activeCount },
-                        { label: 'Vidējā iesaiste', value: '-' },
+                        { label: 'Vidējā iesaiste', value: (() => { const totalViews = polls.reduce((s, p) => s + (p.views_count ?? 0), 0); return totalViews > 0 ? Math.min(100, Math.round((polls.reduce((s, p) => s + (p.responses_count ?? 0), 0) / totalViews) * 100)) + '%' : '-' })() },
                     ]} />
 
                     {!pollsLoading && polls.length > 0 && (

@@ -44,10 +44,15 @@ function PollCard({ poll, copiedId, openMenuId, onShare, onDelete, onClose, onEd
                 <div className="mb-3">
                     <div className="flex justify-between items-center mb-1">
                         <span className="text-xs text-gray-400 font-medium">Iesaiste</span>
-                        <span className="text-xs font-bold text-gray-500">0%</span>
+                        <span className="text-xs font-bold text-gray-500">
+                            {poll.views_count > 0 ? Math.min(100, Math.round(((poll.responses_count ?? 0) / poll.views_count) * 100)) : 0}%
+                        </span>
                     </div>
                     <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                        <div className="h-full bg-primary rounded-full" style={{ width: '0%' }} />
+                        <div
+                            className="h-full bg-primary rounded-full"
+                            style={{ width: `${poll.views_count > 0 ? Math.min(100, Math.round(((poll.responses_count ?? 0) / poll.views_count) * 100)) : 0}%` }}
+                        />
                     </div>
                 </div>
 

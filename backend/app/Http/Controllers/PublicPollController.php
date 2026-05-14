@@ -35,6 +35,8 @@ class PublicPollController extends Controller
             return response(['message' => 'Aptauja nav publiski pieejama.'], 403);
         }
 
+        $poll->increment('views_count');
+
         $poll->load(['questions' => function ($query) {
             $query->orderBy('order')->with(['options' => function ($q) {
                 $q->orderBy('order')->withCount('responses as votes_count');
