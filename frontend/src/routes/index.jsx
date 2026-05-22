@@ -13,6 +13,7 @@ import Dashboard from "../pages/Dashboard.jsx"
 import EditPoll from "../pages/EditPoll.jsx"
 import AnswerPoll from "../pages/AnswerPoll.jsx"
 import NotFound from "../pages/NotFound.jsx"
+import Pricing from "../pages/Pricing.jsx"
 
 export const router = createBrowserRouter([
     { path: '/', element: <App /> },
@@ -29,5 +30,6 @@ export const router = createBrowserRouter([
     { path: '/dashboard', element: <Dashboard /> },
     { path: '/polls/:id/edit', element: <EditPoll />},
     { path: '/poll/:id', element: <AnswerPoll /> },
+    { path: '/pricing', element: <Pricing /> },
     { path: '*', element: <NotFound /> },
 ])
